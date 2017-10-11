@@ -1,0 +1,65 @@
+Auto start program on boot
+There are several ways to start a program on boot. The best way depends on what your program does.
+
+Rc.local
+Rc.local is a script that will run at the end of each multiuser runlevel.
+
+$ sudo nano /etc/rc.local
+Type in the file path your program at the end of the file before ‘exit 0’:
+
+/home/pi/myProgram.bin
+Run Script file on Startup
+Put the executable script file in the ‘/etc/init.d/’ directory.
+
+
+Cron
+Cron is a program that let’s you run programs at set times. E.g. at boot. To open the Cron setup file:
+
+$ sudo crontab -e
+At the bottom of the file type (dont’t use .bin at end of program file):
+
+@reboot /home/pi/myProgram
+To run several commands type ‘&&’ between them:
+
+@reboot sleep 60 && /home/pi/myProgram
+‘Sleep 60’ waits for 60 seconds before the program runs.
+-----@reboot sleep 60 && /home/pi/Panel-Testing/AllLights
+
+Bash
+This method starts your program when you enter the bash console. Also when connecting wit ssh. Put your command at the bottom of ‘/home/pi/.bashrc’. Can be aborted with ‘ctrl-c’ when program is running!:
+
+$ sudo nano /home/pi/.bashrc
+Daemontools supervise
+Daemontools is a collection of tools for managing UNIX services. Supervise monitors a service. It starts the service and restarts the service if it dies. Setting up a new service is easy: all supervise needs is a directory with a run script that runs the service. Daemontools supervise makes sure your program is always running. E.g. if you accidentaly quit your openFrameworks program with ‘esc’ key, it will automatically restart your program.
+
+HOW:
+
+Install daemontools
+
+$ sudo apt-get install daemontools
+in case /etc/service is not created automatically:
+
+$ sudo mkdir -p /etc/service
+Start daemontools (the daemontools program, not your app) on startup.
+
+$ sudo nano /etc/rc.local
+Type at bottom:
+
+csh -cf 'svscanboot &'
+Various methods for starting Daemontools: http://cr.yp.to/daemontools/start.html As described on daemontools site: This line in /etc/rc.local: csh -cf ‘svscanboot &’ (note: instead of ‘/command/svscanboot’ use only ‘svscanboot’ - Ubuntu 12.04LT)
+
+Create directory with ‘run’ executable (linked to your app):
+
+$ mkdir ~/runApp
+$ ln -s ~/of/apps/myApps/xyz/bin/xyz ~/runApp/run
+Type:
+
+$ sudo crontab -e
+Add this line at bottom:
+
+@reboot supervise /home/user/runApp
+Same command (without @reboot) also works to start supervise manually, but make sure daemontools is already running.
+
+In case you want to terminate app and supervise manually:
+
+$ sudo svc -t -x ~/runApp
