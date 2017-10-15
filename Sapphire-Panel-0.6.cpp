@@ -3,6 +3,27 @@
 #include <iostream>
 #include <ctime>
 
+#include<stdio.h>
+#include<stdlib.h>
+#include<unistd.h>
+#include<sys/socket.h>
+#include<sys/types.h>
+#include<netinet/in.h>
+#include<strings.h>
+#include<string.h>
+#include<arpa/inet.h>
+
+#define ERROR -1
+#define BUFFER 1024
+
+	struct sockaddr_in remote_server;
+	int sock; //Socket ID
+	char input[BUFFER]; //User input
+	char output[BUFFER]; //Sent from the server
+	int len;
+
+
+
 using namespace std;
 
 string lastInputUpdate;
@@ -128,6 +149,7 @@ void setOutputPins(int moduleNumber, int outputAmountInt, char outputArray[][OUT
 
 //Writes Input Cache
 void setInputCache(bool(&cached)[TOTAL_MODULES][INPUT_ARRAY_SIZE]) {
+if (false) {
 	ofstream out_file("/var/www/html/index.html");
 //	out_file.open("output.txt");
 	out_file << "<!DOCTYPE html>\n  <head>\n  </head>\n  <body>\n";
@@ -142,6 +164,31 @@ void setInputCache(bool(&cached)[TOTAL_MODULES][INPUT_ARRAY_SIZE]) {
 	}
 	out_file << "  </body>\n</html>";
 	out_file.close();
+} else {
+
+	char out_file[BUFFER];
+	for (int y = 0; y < TOTAL_MODULES; y++) {
+		out_file[y * TOTAL_MODULES] = '\n';
+		for (int x = 0; x < INPUT_ARRAY_SIZE; x++) {
+			out_file[y * TOTAL_MODULES + x + 1] = cached[y][x];
+		}
+	}
+
+
+	if((connect(sock, (struct sockaddr *)&remote_server, sizeof(struct sockaddr_in))) == ERROR) { //attempt to establish a connection to the server
+		perror("connect");
+//		exit(-1);
+	}
+//	while(1) {
+//		fgets(input, BUFFER, stdin); //get input from the user
+		send(sock, out_file, strlen(out_file), 0); //send that info to the server
+
+//		len = recv(sock, output, BUFFER, 0); //Receive info from the server
+//		output[len] = '\0'; //set the last input to a null char so printf doesn't error
+//		printf("%s\n", output); //output the server response to the server
+//	}
+	close(sock); //Close the socket.
+}
 }
 
 //Read from the Input Pins
@@ -156,6 +203,19 @@ void checkInputPins(int moduleNumber, bool(&cachedInputValues)[TOTAL_MODULES][IN
 
 //Now we are actually going to get to our actual function
 int main(void) {
+//Network Setup
+//Insert something here to resolve the voyager-core.local address through DNS or mDNS
+	if((sock = socket(AF_INET, SOCK_STREAM, 0)) == ERROR) { //attempt to create socket
+		perror("socket");
+		//exit(-1);
+	}
+
+	remote_server.sin_family = AF_INET; //fill out remote_server information
+	remote_server.sin_port = htons(atoi("50000"));
+	remote_server.sin_addr.s_addr = inet_addr("10.1.13.176");
+	bzero(remote_server.sin_zero, 8);
+
+
 	//Pin Setup
 	wiringPiSetup();
 	pinSetup();
@@ -166,7 +226,7 @@ int main(void) {
 	bool cachedInputValues[TOTAL_MODULES][INPUT_ARRAY_SIZE];
 	bool inputHasChanged;
 
-	while (true) {
+        while (true) {
 		checkOutputCache(lastOutputCacheTime, cachedOutputValues);
 		inputHasChanged = false;
 		for (int currentModuleStepper = 0;currentModuleStepper < TOTAL_MODULES;currentModuleStepper++) {
@@ -183,3 +243,4 @@ int main(void) {
 	}
 	return 0;
 }
+
