@@ -1,7 +1,7 @@
 Sapphire ISO Panel, created by Matt Ricks
 
-To compile the program, run "./compileProgram.sh" without quotes in your
-terminal.
+Make sure that "isoProgram" is in the cron jobs <crontab -e>
 
-Make sure that the isoProgram is in the cron jobs to run on reboot, and
-then reboot to make the program run!
+To compile the program, run "./compileProgram.sh" without quotes
+in your terminal. When the system reboots, it will start with the
+new program already running.
