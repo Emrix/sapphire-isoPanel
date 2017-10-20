@@ -149,7 +149,6 @@ void setOutputPins(int moduleNumber, int outputAmountInt, char outputArray[][OUT
 
 //Writes Input Cache
 void setInputCache(bool(&cached)[TOTAL_MODULES][INPUT_ARRAY_SIZE]) {
-if (false) {
 	ofstream out_file("/var/www/html/index.html");
 //	out_file.open("output.txt");
 	out_file << "<!DOCTYPE html>\n  <head>\n  </head>\n  <body>\n";
@@ -164,31 +163,6 @@ if (false) {
 	}
 	out_file << "  </body>\n</html>";
 	out_file.close();
-} else {
-
-	char out_file[BUFFER];
-	for (int y = 0; y < TOTAL_MODULES; y++) {
-		out_file[y * TOTAL_MODULES] = '\n';
-		for (int x = 0; x < INPUT_ARRAY_SIZE; x++) {
-			out_file[y * TOTAL_MODULES + x + 1] = cached[y][x];
-		}
-	}
-
-
-	if((connect(sock, (struct sockaddr *)&remote_server, sizeof(struct sockaddr_in))) == ERROR) { //attempt to establish a connection to the server
-		perror("connect");
-//		exit(-1);
-	}
-//	while(1) {
-//		fgets(input, BUFFER, stdin); //get input from the user
-		send(sock, out_file, strlen(out_file), 0); //send that info to the server
-
-//		len = recv(sock, output, BUFFER, 0); //Receive info from the server
-//		output[len] = '\0'; //set the last input to a null char so printf doesn't error
-//		printf("%s\n", output); //output the server response to the server
-//	}
-	close(sock); //Close the socket.
-}
 }
 
 //Read from the Input Pins
