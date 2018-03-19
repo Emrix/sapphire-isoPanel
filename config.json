@@ -1,0 +1,52 @@
+{
+    "input":
+    {
+        "GPIO":
+        {
+            "digital types": ["Momentary push button", "Toggle Button", "ADC", "Switch", "Proximity Sensor", "Rotational Switches", "photointurruptors", "hall effect sensor","keypad matrix","key hole", "Plugs & jacks"],
+            "Analog Types": ["Potentiometer", "Distance Sensor", "LDR"]
+        },
+        "Serial (Arduino)":
+        {
+
+        },
+        "Peripherals":
+        {
+        	"Keyboard"
+        	"Camera"
+        	"Microphone"
+        	"touch input"
+        },
+        "Thorium":
+        {
+
+        },
+        "virtual": {
+        	"Webpage / Screen"
+        }
+    },
+    "output":
+    {
+        "GPIO":
+        {
+            "digital types": ["LED","Buzzer","Backlit button","Backlit switch","7 Seg","LED Bars"],
+            "Analog Types": ["DAC","Servos","Pulsing LED strips","Meters","Gauges"]
+        },
+        "Serial (Arduino)":
+        {
+        	"Neopixel"
+        	"Featherwing"
+        },
+        "Peripherals":
+        {
+        	"Speaker"
+        },
+        "Thorium":
+        {
+
+        },
+        "virtual": {
+        	"Webpage / Screen"
+        }
+    }
+}

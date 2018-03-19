@@ -10,10 +10,73 @@ var Gpio = require('onoff').Gpio; //include onoff to interact with the GPIO
 
 
 //Declare Pins here
-var LED = new Gpio(4, 'out'); //use GPIO pin 4 as output
-var pushButton = new Gpio(17, 'in', 'both'); //use GPIO pin 17 as input, and 'both' button presses, and releases should be handled
-var outputPins = [LED];
+/*
+               74HC595 SIPO                 
+Output <=   QB  | 01  16 | Vcc     => 5v    
+Output <=   QC  | 02  15 | QA      => Output
+Output <=   QD  | 03  14 | SER     => Ser In (MOSI)
+Output <=   QE  | 04  13 | OE      => GND   
+Output <=   QF  | 05  12 | RCLK    => LOAD
+Output <=   QG  | 06  11 | SRCLK   => CLOCK
+Output <=   QH  | 07  10 | SRCLR   => 5v    
+GND    <=   GND | 08  09 | QH'     => SER Out
+
+                  74HC165 PISO                  
+LOAD   <=   SH/LD  | 01  16 | Vcc      => 5v    
+CLOCK  <=   CLK    | 02  15 | CLK INH  => GND   
+Input  <=   E      | 03  14 | D        => Input 
+Input  <=   F      | 04  13 | C        => Input 
+Input  <=   G      | 05  12 | B        => Input 
+Input  <=   H      | 06  11 | A        => Input 
+            QH'    | 07  10 | SER      => SER In
+GND    <=   GND    | 08  09 | QH       => SER Out (MISO)
+
+                  Raspberry Pi                  
+        3.3v   | 01  02 | 5v
+        GPIO2  | 03  04 | 5v
+        GPIO3  | 05  06 | GND
+     <= GPIO4  | 07  08 | GPIO14 =>
+GND  <= GND    | 09  10 | GPIO15 => 
+     <= GPIO17 | 11  12 | GPIO18 => 
+     <= GPIO27 | 13  14 | GND
+     <= GPIO22 | 15  16 | GPIO23 =>
+        3.3v   | 17  18 | GPIO24 =>
+MOSI <= GPIO10 | 19  20 | GND
+MISO <= GPIO9  | 21  22 | GPIO25 => POWER
+SCLK <= GPIO11 | 23  24 | GPIO8  => CE0
+        GND    | 25  26 | GPIO7  => CE1
+------------------------------------
+        DNC    | 27  28 | DNC
+     <= GPIO5  | 29  30 | GND
+     <= GPIO6  | 31  32 | GPIO12 => 
+     <= GPIO13 | 33  34 | GND
+     <= GPIO19 | 35  36 | GPIO16 => 
+     <= GPIO26 | 37  38 | GPIO20 => 
+        GND    | 39  40 | GPIO21 => 
+*/
+
+var CE0 = new Gpio(4, 'out'); //Should be 8
+var CE1 = new Gpio(7, 'out');
+var SCLK = new Gpio(11, 'out');
+var MOSI = new Gpio(10, 'out');
+var MISO = new Gpio(9, 'in', 'both');
+var POWER = new Gpio(23, 'in', 'both');
+var outputPins = [CE0, CE1, SCLK, MOSI];
+var inputPins = [MISO, POWER];
 //End declaring pins
+
+
+
+
+
+//Parse Config File
+fs.readFile(__dirname + '/config.json', function(err, data) { //read file config.json
+    if (err) {
+        return {};
+    }
+
+});
+//End Parse Config File
 
 
 
@@ -33,6 +96,7 @@ function handler(req, res) { //create server
         return res.end();
     });
 }
+/*Here's an idea, make it so the config files can be configured through the web browser*/
 //END SERVER INFO
 
 
@@ -48,6 +112,13 @@ function handler(req, res) { //create server
 
 //Serial
 //End Serial
+
+
+
+
+
+//Keyboard Input
+//End Keyboard Input
 
 
 
@@ -91,11 +162,12 @@ io.sockets.on('connection', function(socket) { // WebSocket Connection
 //Clean Up
 function unexportOnClose() { //function to run when exiting program
     outputPins.forEach(function(currentValue) { //for each LED
-        console.log(currentValue);
         currentValue.writeSync(0); //turn off LED
         currentValue.unexport(); //unexport GPIO
     });
-    pushButton.unexport(); // Unexport Button GPIO to free resources
+    inputPins.forEach(function(currentValue) { //for each LED
+        currentValue.unexport(); //unexport GPIO to free resources
+    });
 };
 
 process.on('SIGINT', function() {
