@@ -91,10 +91,15 @@ io.sockets.on('connection', function(socket) { // WebSocket Connection
 //Clean Up
 function unexportOnClose() { //function to run when exiting program
     outputPins.forEach(function(currentValue) { //for each LED
+        console.log(currentValue);
         currentValue.writeSync(0); //turn off LED
         currentValue.unexport(); //unexport GPIO
     });
+    pushButton.unexport(); // Unexport Button GPIO to free resources
 };
 
-process.on('SIGINT', unexportOnClose); //function to run when user closes using ctrl+cc
+process.on('SIGINT', function() {
+    unexportOnClose
+    process.exit(); //exit completely
+}); //function to run when user closes using ctrl+c
 //End Clean up
