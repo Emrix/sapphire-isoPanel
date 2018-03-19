@@ -2,7 +2,7 @@
 var http = require('http').createServer(handler); //require http server, and create server with function handler()
 var fs = require('fs'); //require filesystem module
 var io = require('socket.io')(http) //require socket.io module and pass the http object (server)
-var Gpio = require('pigpio').Gpio; //include onoff to interact with the GPIO
+var Gpio = require('onoff').Gpio; //include onoff to interact with the GPIO
 //End Libraries
 
 
@@ -10,15 +10,9 @@ var Gpio = require('pigpio').Gpio; //include onoff to interact with the GPIO
 
 
 //Declare Pins here
-var LED = new Gpio(4, {
-    mode: Gpio.OUTPUT
-}); //use GPIO pin 4 as output
-
-var pushButton = new Gpio(17, {
-    mode: Gpio.INPUT,
-    pullUpDown: Gpio.PUD_DOWN,
-    edge: Gpio.EITHER_EDGE
-}); //use GPIO pin 17 as input
+var LED = new Gpio(4, 'out'); //use GPIO pin 4 as output
+var pushButton = new Gpio(17, 'in', 'both'); //use GPIO pin 17 as input, and 'both' button presses, and releases should be handled
+var outputPins = [LED];
 //End declaring pins
 
 
@@ -78,9 +72,8 @@ io.sockets.on('connection', function(socket) { // WebSocket Connection
             console.error('There was an error', err); //output error message to console
             return;
         }
-        lightvalue = value; //Do GPIO or Serial Functions Here
+        lightvalue = value;
         socket.emit('light', lightvalue); //send button status to client
-        //Send GPIO stuffs
     });
     socket.on('light', function(data) { //get light switch status from client
         lightvalue = data;
@@ -96,8 +89,12 @@ io.sockets.on('connection', function(socket) { // WebSocket Connection
 
 
 //Clean Up
-process.on('SIGINT', function() { //on ctrl+c
-    LED.digitalWrite(0); // Turn LED off
-    process.exit(); //exit completely
-});
+function unexportOnClose() { //function to run when exiting program
+    outputPins.forEach(function(currentValue) { //for each LED
+        currentValue.writeSync(0); //turn off LED
+        currentValue.unexport(); //unexport GPIO
+    });
+};
+
+process.on('SIGINT', unexportOnClose); //function to run when user closes using ctrl+cc
 //End Clean up
