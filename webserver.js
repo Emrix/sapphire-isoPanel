@@ -42,10 +42,10 @@ GND  <= GND    | 09  10 | GPIO15 =>
      <= GPIO22 | 15  16 | GPIO23 =>
         3.3v   | 17  18 | GPIO24 =>
 MOSI <= GPIO10 | 19  20 | GND
-MISO <= GPIO9  | 21  22 | GPIO25 => POWER
+MISO <= GPIO9  | 21  22 | GPIO25 => PWR
 SCLK <= GPIO11 | 23  24 | GPIO8  => CE0
         GND    | 25  26 | GPIO7  => CE1
-------------------------------------
+---------------------------------------
         DNC    | 27  28 | DNC
      <= GPIO5  | 29  30 | GND
      <= GPIO6  | 31  32 | GPIO12 => 
@@ -60,9 +60,9 @@ var CE1 = new Gpio(7, 'out');
 var SCLK = new Gpio(11, 'out');
 var MOSI = new Gpio(10, 'out');
 var MISO = new Gpio(9, 'in', 'both');
-var POWER = new Gpio(23, 'in', 'both');
+var PWR = new Gpio(23, 'in', 'both');
 var outputPins = [CE0, CE1, SCLK, MOSI];
-var inputPins = [MISO, POWER];
+var inputPins = [MISO, PWR];
 //End declaring pins
 
 
@@ -126,8 +126,8 @@ function handler(req, res) { //create server
 
 //GPIO
 function setLightValue(TFlightValue) {
-    LED.writeSync(TFlightValue); //turn LED on or off
-    //LED.pwmWrite(TFlightValue); //PWM (0-255)
+    CE0.writeSync(TFlightValue); //turn CE0 on or off
+    //CE0.pwmWrite(TFlightValue); //PWM (0-255)
 }
 //End GPIO
 
@@ -138,7 +138,8 @@ function setLightValue(TFlightValue) {
 //WebSockets
 io.sockets.on('connection', function(socket) { // WebSocket Connection
     var lightvalue = 0; //static variable for current status
-    pushButton.watch(function(err, value) { //Watch for hardware interrupts on pushButton
+    //Watch PWR
+    PWR.watch(function(err, value) { //Watch for hardware interrupts on pushButton
         if (err) { //if an error
             console.error('There was an error', err); //output error message to console
             return;
@@ -146,14 +147,24 @@ io.sockets.on('connection', function(socket) { // WebSocket Connection
         lightvalue = value;
         socket.emit('light', lightvalue); //send button status to client
     });
+    //End Watch PWR
+    //Watch vars from Webpage
     socket.on('light', function(data) { //get light switch status from client
         lightvalue = data;
-        if (lightvalue != LED.readSync()) { //only change LED if status has changed
-            setLightValue(lightvalue); //turn LED on or off
+        if (lightvalue != CE0.readSync()) { //only change CE0 if status has changed
+            setLightValue(lightvalue); //turn CE0 on or off
         }
     });
+    //End Watch vars from Webpage
 });
 //End WebSockets
+
+
+
+
+//Running the poller
+
+//End running the poller
 
 
 
@@ -161,17 +172,17 @@ io.sockets.on('connection', function(socket) { // WebSocket Connection
 
 //Clean Up
 function unexportOnClose() { //function to run when exiting program
-    outputPins.forEach(function(currentValue) { //for each LED
-        currentValue.writeSync(0); //turn off LED
+    outputPins.forEach(function(currentValue) { //for each CE0
+        currentValue.writeSync(0); //turn off CE0
         currentValue.unexport(); //unexport GPIO
     });
-    inputPins.forEach(function(currentValue) { //for each LED
+    inputPins.forEach(function(currentValue) { //for each CE0
         currentValue.unexport(); //unexport GPIO to free resources
     });
 };
 
 process.on('SIGINT', function() {
-    unexportOnClose
+    unexportOnClose();
     process.exit(); //exit completely
 }); //function to run when user closes using ctrl+c
 //End Clean up

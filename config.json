@@ -3,7 +3,7 @@
     {
         "GPIO":
         {
-            "digital types": ["Momentary push button", "Toggle Button", "ADC", "Switch", "Proximity Sensor", "Rotational Switches", "photointurruptors", "hall effect sensor","keypad matrix","key hole", "Plugs & jacks"],
+            "digital types": ["Momentary push button", "Toggle Button", "ADC", "Switch", "Proximity Sensor", "Rotational Switches", "photointurruptors", "hall effect sensor", "keypad matrix", "key hole", "Plugs & jacks"],
             "Analog Types": ["Potentiometer", "Distance Sensor", "LDR"]
         },
         "Serial (Arduino)":
@@ -12,41 +12,67 @@
         },
         "Peripherals":
         {
-        	"Keyboard"
-        	"Camera"
-        	"Microphone"
-        	"touch input"
+            "Keyboard"
+            "Camera"
+            "Microphone"
+            "touch input"
         },
         "Thorium":
         {
 
         },
-        "virtual": {
-        	"Webpage / Screen"
+        "virtual":
+        {
+            "Webpage / Screen"
         }
     },
     "output":
     {
         "GPIO":
         {
-            "digital types": ["LED","Buzzer","Backlit button","Backlit switch","7 Seg","LED Bars"],
-            "Analog Types": ["DAC","Servos","Pulsing LED strips","Meters","Gauges"]
+            "digital types": ["LED", "Buzzer", "Backlit button", "Backlit switch", "7 Seg", "LED Bars"],
+            "Analog Types": ["DAC", "Servos", "Pulsing LED strips", "Meters", "Gauges"]
         },
         "Serial (Arduino)":
         {
-        	"Neopixel"
-        	"Featherwing"
+            "Neopixel"
+            "Featherwing"
         },
         "Peripherals":
         {
-        	"Speaker"
+            "Speaker"
         },
         "Thorium":
         {
 
         },
-        "virtual": {
-        	"Webpage / Screen"
+        "virtual":
+        {
+            "Webpage / Screen"
         }
+    },
+    "Types of input":
+    {
+        "Button"
+        "Switch"
+        "Dial"
+        "Lever / Throttle"
+        "Joy Cons"
+        "Wires"
+        "Fiber Optics"
+        "Rotational Switches"
+        "ISO Chip"
+        "ISO Rods"
+        "RFID"
+        "QR Codes"
+        "Keyboards"
+        "Key Pads"
+        "GUI"
+        "Turnable Lever Dial things (See Jodi)"
+
+    },
+    "Types of output":
+    {
+
     }
 }
