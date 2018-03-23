@@ -3,6 +3,7 @@ var http = require('http').createServer(handler); //require http server, and cre
 var fs = require('fs'); //require filesystem module
 var io = require('socket.io')(http) //require socket.io module and pass the http object (server)
 var Gpio = require('onoff').Gpio; //include onoff to interact with the GPIO
+const MAX_IO = 100;
 //End Libraries
 
 
@@ -16,14 +17,14 @@ Output <=   QB  | 01  16 | Vcc     => 5v
 Output <=   QC  | 02  15 | QA      => Output
 Output <=   QD  | 03  14 | SER     => Ser In (MOSI)
 Output <=   QE  | 04  13 | OE      => GND   
-Output <=   QF  | 05  12 | RCLK    => LOAD
-Output <=   QG  | 06  11 | SRCLK   => CLOCK
+Output <=   QF  | 05  12 | RCLK    => CE1
+Output <=   QG  | 06  11 | SRCLK   => SCLK
 Output <=   QH  | 07  10 | SRCLR   => 5v    
 GND    <=   GND | 08  09 | QH'     => SER Out
 
                   74HC165 PISO                  
 LOAD   <=   SH/LD  | 01  16 | Vcc      => 5v    
-CLOCK  <=   CLK    | 02  15 | CLK INH  => GND   
+SCLK   <=   CLK    | 02  15 | CLK INH  => GND   
 Input  <=   E      | 03  14 | D        => Input 
 Input  <=   F      | 04  13 | C        => Input 
 Input  <=   G      | 05  12 | B        => Input 
@@ -55,7 +56,7 @@ SCLK <= GPIO11 | 23  24 | GPIO8  => CE0
         GND    | 39  40 | GPIO21 => 
 */
 
-var CE0 = new Gpio(4, 'out'); //Should be 8
+var CE0 = new Gpio(8, 'out'); //Should be 8
 var CE1 = new Gpio(7, 'out');
 var SCLK = new Gpio(11, 'out');
 var MOSI = new Gpio(10, 'out');
@@ -126,6 +127,7 @@ function handler(req, res) { //create server
 
 //GPIO
 function setLightValue(TFlightValue) {
+    console.log(TFlightValue);
     CE0.writeSync(TFlightValue); //turn CE0 on or off
     //CE0.pwmWrite(TFlightValue); //PWM (0-255)
 }
@@ -161,9 +163,33 @@ io.sockets.on('connection', function(socket) { // WebSocket Connection
 
 
 
-
+var outputs = [];
 //Running the poller
+function pollGPIO() {
+    console.log("polling");
+    //Chip enable for reading
+    CE0.writeSync(1);
+    CE0.writeSync(0);
+    for (var x = 0; x < MAX_IO; x++) {
+        //write output
+        MOSI.writeSync(1);
+        //clock tick
+        SCLK.writeSync(1);
+        SCLK.writeSync(0);
+        //read input
+        outputs[x] = MISO.readSync();
+    }
+    //Chip enable for writing
+    CE1.writeSync(1);
+    CE1.writeSync(0);
+    setTimeout(pollGPIO(), 5000);
+}
 
+var MISO = new Gpio(9, 'in', 'both');
+
+
+
+setTimeout(pollGPIO(), 5000);
 //End running the poller
 
 
