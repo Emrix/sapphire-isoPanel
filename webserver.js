@@ -155,13 +155,22 @@ io.sockets.on('connection', function(socket) { // WebSocket Connection
         lightvalue = data;
         if (lightvalue) { //only change CE0 if status has changed
             for (var x = 0; x < MAX_IO; x++) {
-                outputs[x] = 1;
+                if (x % 2) {
+			inputs[x] = 1;
+		} else {
+			inputs[x] = 0;
+		}
             }
         } else {
             for (var x = 0; x < MAX_IO; x++) {
-                outputs[x] = 0;
+                if (x % 2) {
+			inputs[x] = 0;
+		} else {
+			inputs[x] = 1;
+		}
             }
         }
+	console.log(data);
     });
     //End Watch vars from Webpage
 });
@@ -170,35 +179,35 @@ io.sockets.on('connection', function(socket) { // WebSocket Connection
 
 
 var outputs = [];
+var inputs = [];
 for (var x = 0; x < MAX_IO; x++) {
-    outputs[x] = 0;
+    inputs[x] = 0;
 }
 //Running the poller
 function pollGPIO() {
-    console.log("polling");
     //Chip enable for reading
     CE0.writeSync(1);
     CE0.writeSync(0);
     for (var x = 0; x < MAX_IO; x++) {
         //write output
-        MOSI.writeSync(1);
+        MOSI.writeSync(inputs[x]);
         //clock tick
         SCLK.writeSync(1);
         SCLK.writeSync(0);
         //read input
-        outputs[x] = MISO.readSync();
+        //outputs[x] = MISO.readSync();
     }
     //Chip enable for writing
     CE1.writeSync(1);
     CE1.writeSync(0);
-    setTimeout(pollGPIO(), 5000);
+    setTimeout(pollGPIO, 500);
 }
 
 var MISO = new Gpio(9, 'in', 'both');
 
 
 
-setTimeout(pollGPIO(), 5000);
+setTimeout(pollGPIO, 500);
 //End running the poller
 
 
