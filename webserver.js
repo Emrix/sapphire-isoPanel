@@ -153,8 +153,14 @@ io.sockets.on('connection', function(socket) { // WebSocket Connection
     //Watch vars from Webpage
     socket.on('light', function(data) { //get light switch status from client
         lightvalue = data;
-        if (lightvalue != CE0.readSync()) { //only change CE0 if status has changed
-            setLightValue(lightvalue); //turn CE0 on or off
+        if (lightvalue) { //only change CE0 if status has changed
+            for (var x = 0; x < MAX_IO; x++) {
+                outputs[x] = 1;
+            }
+        } else {
+            for (var x = 0; x < MAX_IO; x++) {
+                outputs[x] = 0;
+            }
         }
     });
     //End Watch vars from Webpage
@@ -164,6 +170,9 @@ io.sockets.on('connection', function(socket) { // WebSocket Connection
 
 
 var outputs = [];
+for (var x = 0; x < MAX_IO; x++) {
+    outputs[x] = 0;
+}
 //Running the poller
 function pollGPIO() {
     console.log("polling");
