@@ -12,33 +12,33 @@ const MAX_IO = 100;
 
 //Declare Pins here
 /*
-               74HC595 SIPO                 
-Output <=   QB  | 01  16 | Vcc     => 5v    
+               74HC595 SIPO
+Output <=   QB  | 01  16 | Vcc     => 5v
 Output <=   QC  | 02  15 | QA      => Output
 Output <=   QD  | 03  14 | SER     => Ser In (MOSI)
-Output <=   QE  | 04  13 | OE      => GND   
+Output <=   QE  | 04  13 | OE      => GND
 Output <=   QF  | 05  12 | RCLK    => CE1
 Output <=   QG  | 06  11 | SRCLK   => SCLK
-Output <=   QH  | 07  10 | SRCLR   => 5v    
+Output <=   QH  | 07  10 | SRCLR   => 5v
 GND    <=   GND | 08  09 | QH'     => SER Out
 
-                  74HC165 PISO                  
-LOAD   <=   SH/LD  | 01  16 | Vcc      => 5v    
-SCLK   <=   CLK    | 02  15 | CLK INH  => GND   
-Input  <=   E      | 03  14 | D        => Input 
-Input  <=   F      | 04  13 | C        => Input 
-Input  <=   G      | 05  12 | B        => Input 
-Input  <=   H      | 06  11 | A        => Input 
+                  74HC165 PISO
+LOAD   <=   SH/LD  | 01  16 | Vcc      => 5v
+SCLK   <=   CLK    | 02  15 | CLK INH  => GND
+Input  <=   E      | 03  14 | D        => Input
+Input  <=   F      | 04  13 | C        => Input
+Input  <=   G      | 05  12 | B        => Input
+Input  <=   H      | 06  11 | A        => Input
             QH'    | 07  10 | SER      => SER In
 GND    <=   GND    | 08  09 | QH       => SER Out (MISO)
 
-                  Raspberry Pi                  
+                  Raspberry Pi
         3.3v   | 01  02 | 5v
         GPIO2  | 03  04 | 5v
         GPIO3  | 05  06 | GND
      <= GPIO4  | 07  08 | GPIO14 =>
-GND  <= GND    | 09  10 | GPIO15 => 
-     <= GPIO17 | 11  12 | GPIO18 => 
+GND  <= GND    | 09  10 | GPIO15 =>
+     <= GPIO17 | 11  12 | GPIO18 =>
      <= GPIO27 | 13  14 | GND
      <= GPIO22 | 15  16 | GPIO23 =>
         3.3v   | 17  18 | GPIO24 =>
@@ -49,11 +49,11 @@ SCLK <= GPIO11 | 23  24 | GPIO8  => CE0
 ---------------------------------------
         DNC    | 27  28 | DNC
      <= GPIO5  | 29  30 | GND
-     <= GPIO6  | 31  32 | GPIO12 => 
+     <= GPIO6  | 31  32 | GPIO12 =>
      <= GPIO13 | 33  34 | GND
-     <= GPIO19 | 35  36 | GPIO16 => 
-     <= GPIO26 | 37  38 | GPIO20 => 
-        GND    | 39  40 | GPIO21 => 
+     <= GPIO19 | 35  36 | GPIO16 =>
+     <= GPIO26 | 37  38 | GPIO20 =>
+        GND    | 39  40 | GPIO21 =>
 */
 
 var CE0 = new Gpio(8, 'out'); //Should be 8
@@ -71,11 +71,10 @@ var inputPins = [MISO, PWR];
 
 
 //Parse Config File
-fs.readFile(__dirname + '/config.json', function(err, data) { //read file config.json
+fs.readFile((__dirname + '/config.json'),{encoding: 'utf-8'}, function(err, data) { //read file config.json
     if (err) {
         return {};
     }
-
 });
 //End Parse Config File
 
@@ -87,7 +86,7 @@ fs.readFile(__dirname + '/config.json', function(err, data) { //read file config
 http.listen(8080); //listen to port 8080
 
 function handler(req, res) { //create server
-    fs.readFile(__dirname + '/public/index.html', function(err, data) { //read file index.html in public folder
+    fs.readFile((__dirname + '/public/index.html'), function(err, data) { //read file index.html in public folder
         if (err) {
             res.writeHead(404, { 'Content-Type': 'text/html' }); //display 404 on error
             return res.end("404 Not Found");
