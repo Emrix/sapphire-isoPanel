@@ -4,7 +4,7 @@
   "description": "Sapphire ISO Panel, created by Matt Ricks",
   "main": "webserver.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "node app.js"
   },
   "keywords": [],
   "author": "",
