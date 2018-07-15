@@ -23,40 +23,13 @@
 					<option value="Default">Default</option>
 					<option value="NotDefault">Not Default</option>
 				</select>
-				<input type="checkbox" id="edit">
-				<span>Edit Mode</span>
-			</div>
-			<div class="options">
-				<h3>Panel Options</h2>
-				<p>Aspect Ratio</p>
-				<input id="aspectRatioX" type="text" name="X Value" value="16" size="5">
-				<span>:</span>
-				<input id="aspectRatioY" type="text" name="Y Value" value="9" size="5">
-				<button onclick='updateAspectRatio(document.getElementById("aspectRatioX").value,document.getElementById("aspectRatioY").value)'>Update</button>
-				<br>
-				<button>Delete</button>
-			</div>
-			<div class="drawer">
-				<h3>Parts</h2>
-				<p>Add New Part</p>
-				<select id="componentSelector" onchange="componentSelect()">
-					<option value="DRIVER">DRIVER</option>
-					<option value="EMITTER">EMITTER</option>
-					<option value="GATE">GATE</option>
-					<option value="SPECIAL">SPECIAL</option>
-				</select>
-				<select id="typeSelector" onchange="typeSelect()">
-					<option value="constant">constant</option>
-					<option value="toggle">toggle</option>
-				</select>
-				<button onclick="addNewPart()">Add</button>
 			</div>
 		</div>
 		<div class="workarea">
-			<div id="panelContainment">
+			<div id="inputs">
 			</div>
-			<svg id="svg">
-			</svg>
+			<div id="outputs">
+			</div>
 		</div>
 	</main>
 	<div>
