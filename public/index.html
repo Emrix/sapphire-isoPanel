@@ -19,7 +19,7 @@
 				<input type="checkbox" id="light">
 				<br>
 				<h3>Select a Panel Configuration</h3>
-				<select name="configurationSelector">
+				<select name="configurationSelector" id = "configurationSelector" onchange="loadNewConfig(this.value)">
 					<option value="Default">Default</option>
 					<option value="NotDefault">Not Default</option>
 				</select>
@@ -75,7 +75,7 @@
 			socket.emit("light", data); //send push button status to back to server
 		});
 		</script>
-		<script src="./CircuitBuilder.js"></script>
+		<script src="./index.js"></script>
 	</div>
 </body>
 

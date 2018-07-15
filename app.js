@@ -1,31 +1,72 @@
 //Start Create server
 var handler = (req, res) => {
-    var FileToLoad = "";
+    var itemToSend = "";
     var mimeType = "";
-    switch (req.url) {
-        case ("/CircuitBuilder.js"):
-            FileToLoad = "/public/CircuitBuilder.js";
+    var loadFile = false;
+    var request = req.url;
+    request = request.split("?");
+    switch (request[0]) {
+        case ("/index.js"):
+            itemToSend = "/public/index.js";
             mimeType = "application/javascript";
+            loadFile = true;
             break;
         case ("/index.css"):
-            FileToLoad = "/public/index.css";
+            itemToSend = "/public/index.css";
             var mimeType = "text/css";
+            loadFile = true;
+            break;
+        case ("/loadConfig"):
+            var itemToSend = request[1];
+            var itemToSend = itemToSend.replace("../", "./");
+            itemToSend = "/config/" + itemToSend;
+            var mimeType = "application/json";
+            loadFile = true;
+            break;
+        case ("/configList"):
+            itemToSend = "/config/";
+            var mimeType = "text/plain";
+            loadFile = false;
             break;
         default:
-            FileToLoad = "/public/index.html";
+            itemToSend = "/public/index.html";
             var mimeType = "text/html";
+            loadFile = true;
             break;
     }
-    fs.readFile((__dirname + FileToLoad), function(err, data) { //read file index.html in public folder
-        if (err) {
-            res.writeHead(404, { 'Content-Type': 'text/html' }); //display 404 on error
-            return res.end("404 Not Found");
+
+    if (loadFile) {
+        fs.readFile((__dirname + itemToSend), function(err, data) { //read file index.html in public folder
+            if (err) {
+                res.writeHead(404, { 'Content-Type': 'text/html' }); //display 404 on error
+                return res.end("404 Not Found");
+            }
+            res.writeHead(200, { 'Content-Type': mimeType }); //write HTML
+            res.write(data); //write data from index.html
+            if (debugMode) console.log("Web User loaded Page");
+            return res.end();
+        });
+    } else {
+        switch (itemToSend) {
+            case "/config/":
+                //                fs.readdir((__dirname + itemToSend), (err, files) => {
+                fs.readdir(__dirname + itemToSend, (err, files) => {
+                    if (err) {
+                        res.writeHead(404, { 'Content-Type': 'text/html' }); //display 404 on error
+                        return res.end("404 Not Found");
+                    }
+                    files = JSON.stringify(files);
+                    res.writeHead(200, { 'Content-Type': mimeType }); //write HTML
+                    res.write(files);
+                    return res.end();
+                })
+                break;
+            default:
+                res.writeHead(404, { 'Content-Type': 'text/html' }); //display 404 on error
+                return res.end("404 Not Found");
+                break;
         }
-        res.writeHead(200, { 'Content-Type': mimeType }); //write HTML
-        res.write(data); //write data from index.html
-        if (debugMode) console.log("Web User loaded Page");
-        return res.end();
-    });
+    }
 }
 //End Create server
 
@@ -141,7 +182,6 @@ const configuring = {
             } else {
                 //Registers itself and current configuration on the thorium Server
                 /* I'd need to set the client veriable again, and I'm not sure if that'll work or not. */
-                console.log(data);
                 //initializes the circuit into the logical analyzer
                 circuit = {};
 
