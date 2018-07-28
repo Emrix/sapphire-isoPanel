@@ -6,7 +6,7 @@ header {
 	background-color: blue;
 	position: absolute;
 	height: 150px;
-	width: 1300px;
+	width: 900px;
 	top: 0px;
 	left: 0px;
 	display: block;
@@ -16,7 +16,7 @@ main {
 	background-color: grey;
 	position: absolute;
 	height: auto;
-	width: 1300px;
+	width: 900px;
 	top: 150px;
 	left: 0px;
 	display: block;
@@ -35,7 +35,7 @@ main .sidepanel {
 main .workarea {
 	position: absolute;
 	height: auto;
-	width: 1000px;
+	width: 600px;
 	top: 0px;
 	left: 300px;
 	display: inline;
@@ -44,7 +44,7 @@ main .workarea {
 #inputs {
 	position: absolute;
 	height: auto;
-	width: 400px;
+	width: 300px;
 	top: 0px;
 	left: 0px;
 	display: inline;
@@ -54,9 +54,9 @@ main .workarea {
 #outputs {
 	position: absolute;
 	height: auto;
-	width: 400px;
+	width: 300px;
 	top: 0px;
-	left: 400px;
+	left: 300px;
 	display: inline;
 	background-color: yellow;
 }

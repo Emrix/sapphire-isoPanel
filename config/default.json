@@ -8,6 +8,13 @@
     {
         "60df66a4-06b9-4808-86a1-787b54a09164":
         {
+            "x": 0,
+            "y": 0,
+            "label": "toggle 1",
+            "color": "#fff",
+            "Scale": 1,
+            "startBit":0,
+
             "component": "driver",
             "type": "toggle",
             "level": -1,
@@ -16,6 +23,13 @@
         },
         "330e72a5-c989-4df6-a97b-4e8c76d24b95":
         {
+            "x": 0,
+            "y": 0,
+            "label": "AND",
+            "color": "#fff",
+            "Scale": 1,
+            "startBit":-1,
+
             "component": "gate",
             "type": "AND",
             "level": -1,
@@ -24,6 +38,13 @@
         },
         "142c678f-ed0b-4a1d-a869-b1ef6b659c24":
         {
+            "x": 0,
+            "y": 0,
+            "label": "AND'd light",
+            "color": "#fff",
+            "Scale": 1,
+            "startBit":0,
+
             "component": "emitter",
             "type": "emitter",
             "level": -1,
@@ -32,6 +53,13 @@
         },
         "94d8f13a-f818-4136-a633-2efa8af15087":
         {
+            "x": 0,
+            "y": 0,
+            "label": "toggle 2",
+            "color": "#fff",
+            "Scale": 1,
+            "startBit":1,
+
             "component": "driver",
             "type": "toggle",
             "level": -1,

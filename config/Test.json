@@ -1,13 +1,21 @@
 {
     "server": "localhost",
     "id": "8bbc651f-8245-44fd-85d9-ebabf1596196",
-    "name": "logic test",
+    "name": "another test",
+    "aspect-ratio": 1,
     
     "cables": [],
     "circuit":
     {
         "60df66a4-06b9-4808-86a1-787b54a09164":
         {
+            "x": 0,
+            "y": 0,
+            "label": "driver 1",
+            "color": "#fff",
+            "Scale": 1,
+            "startBit":0,
+
             "component": "driver",
             "type": "toggle",
             "level": -1,
@@ -16,6 +24,13 @@
         },
         "330e72a5-c989-4df6-a97b-4e8c76d24b95":
         {
+            "x": 0,
+            "y": 0,
+            "label": "gate 2",
+            "color": "#fff",
+            "Scale": 1,
+            "startBit":0,
+
             "component": "gate",
             "type": "AND",
             "level": -1,
@@ -24,6 +39,43 @@
         },
         "142c678f-ed0b-4a1d-a869-b1ef6b659c24":
         {
+            "x": 0,
+            "y": 0,
+            "label": "emitter 3",
+            "color": "#fff",
+            "Scale": 1,
+            "startBit":0,
+
+            "component": "emitter",
+            "type": "emitter",
+            "level": -1,
+            "to": [],
+            "from": ["330e72a5-c989-4df6-a97b-4e8c76d24b95"]
+        },
+        "142c678f-ed0b-4a1d-a969-b1ef6b659c24":
+        {
+            "x": 0,
+            "y": 0,
+            "label": "emitter 4",
+            "color": "#fff",
+            "Scale": 1,
+            "startBit":0,
+
+            "component": "emitter",
+            "type": "emitter",
+            "level": -1,
+            "to": [],
+            "from": ["330e72a5-c989-4df6-a97b-4e8c76d24b95"]
+        },
+        "142c678f-ed1b-4a1d-a869-b1ef6b659c24":
+        {
+            "x": 0,
+            "y": 0,
+            "label": "emitter 5",
+            "color": "#fff",
+            "Scale": 1,
+            "startBit":0,
+
             "component": "emitter",
             "type": "emitter",
             "level": -1,
@@ -32,6 +84,43 @@
         },
         "94d8f13a-f818-4136-a633-2efa8af15087":
         {
+            "x": 0,
+            "y": 0,
+            "label": "driver 6",
+            "color": "#fff",
+            "Scale": 1,
+            "startBit":0,
+
+            "component": "driver",
+            "type": "toggle",
+            "level": -1,
+            "to": ["330e72a5-c989-4df6-a97b-4e8c76d24b95"],
+            "from": []
+        },
+        "94d3f13a-f818-4136-a633-2efa8af15087":
+        {
+            "x": 0,
+            "y": 0,
+            "label": "driver 7",
+            "color": "#fff",
+            "Scale": 1,
+            "startBit":0,
+
+            "component": "driver",
+            "type": "toggle",
+            "level": -1,
+            "to": ["330e72a5-c989-4df6-a97b-4e8c76d24b95"],
+            "from": []
+        },
+        "94d8f13a-f818-4136-a6f3-2efa8af15087":
+        {
+            "x": 0,
+            "y": 0,
+            "label": "driver 8",
+            "color": "#fff",
+            "Scale": 1,
+            "startBit":0,
+
             "component": "driver",
             "type": "toggle",
             "level": -1,
