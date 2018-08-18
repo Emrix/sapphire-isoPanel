@@ -35,6 +35,17 @@ function addNewPart(GUID, partInfo) {
 					list.appendChild(br);
 					break;
 				case "toggle":
+				case "button":
+				case "dumbCable":
+				case "fiberCable":
+				case "smartCable":
+				case "2WaySwitch":
+				case "3WaySwitch":
+				case "rotaryEncoder":
+				case "adc":
+				case "chip":
+				case "rod":
+				case "rotarySwitch":
 					var input = document.createElement("input"); //Create the option
 					input.setAttribute("type", "checkbox"); //set the value
 					input.setAttribute("id", GUID); //set the value
@@ -45,6 +56,8 @@ function addNewPart(GUID, partInfo) {
 					list.appendChild(label);
 					list.appendChild(br);
 					break;
+				default:
+					throw ("Unknown Driver Type " + type);
 			}
 			addWebSocketListener(GUID);
 			break;

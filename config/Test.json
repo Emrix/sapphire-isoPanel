@@ -17,7 +17,7 @@
             "startBit":0,
 
             "component": "driver",
-            "type": "toggle",
+            "type": "2WaySwitch",
             "level": -1,
             "to": ["330e72a5-c989-4df6-a97b-4e8c76d24b95"],
             "from": []
@@ -92,7 +92,7 @@
             "startBit":0,
 
             "component": "driver",
-            "type": "toggle",
+            "type": "2WaySwitch",
             "level": -1,
             "to": ["330e72a5-c989-4df6-a97b-4e8c76d24b95"],
             "from": []
@@ -107,7 +107,7 @@
             "startBit":0,
 
             "component": "driver",
-            "type": "toggle",
+            "type": "2WaySwitch",
             "level": -1,
             "to": ["330e72a5-c989-4df6-a97b-4e8c76d24b95"],
             "from": []
@@ -122,7 +122,7 @@
             "startBit":0,
 
             "component": "driver",
-            "type": "toggle",
+            "type": "2WaySwitch",
             "level": -1,
             "to": ["330e72a5-c989-4df6-a97b-4e8c76d24b95"],
             "from": []

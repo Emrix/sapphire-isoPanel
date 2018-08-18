@@ -10,13 +10,13 @@
         {
             "x": 0,
             "y": 0,
-            "label": "toggle 1",
+            "label": "2 Way Switch",
             "color": "#fff",
             "Scale": 1,
             "startBit":0,
 
             "component": "driver",
-            "type": "toggle",
+            "type": "2WaySwitch",
             "level": -1,
             "to": ["330e72a5-c989-4df6-a97b-4e8c76d24b95"],
             "from": []
@@ -55,13 +55,13 @@
         {
             "x": 0,
             "y": 0,
-            "label": "toggle 2",
+            "label": "button",
             "color": "#fff",
             "Scale": 1,
             "startBit":1,
 
             "component": "driver",
-            "type": "toggle",
+            "type": "button",
             "level": -1,
             "to": ["330e72a5-c989-4df6-a97b-4e8c76d24b95"],
             "from": []

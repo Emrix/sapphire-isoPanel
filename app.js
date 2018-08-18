@@ -90,6 +90,15 @@ if (isAPi) {
 		writeSync: () => {},
 		unexport: () => {},
 		watch: () => {},
+		readSync: () => {
+			var y = Math.random();
+			if (y < 0.5) {
+				y = Math.floor(y)
+			} else {
+				y = Math.ceil(y)
+			}
+			return y;
+		}
 	}
 }
 var uuidv4 = require('uuid/v4');
@@ -122,12 +131,18 @@ var inputPins = [MISO, PWR];
 
 //Start Declare Variables
 const MAX_IO = 100;
-var outputs = [];
-var inputs = [];
+var SPIbitOutputs = [];
+var SPIbitInputs = [];
+var SPIfloatOutputs = {};
+var SPIfloatInputs = {};
+var WEBoutputs = {};
+var WEBinputs = {};
+var THORIUMoutputs = {};
+var THORIUMinputs = {};
 for (var x = 0; x < MAX_IO; x++) {
-	inputs[x] = 0;
+	SPIbitInputs[x] = -1;
 }
-var debugMode = true;
+var debugMode = false;
 var isAPi = false;
 var circuit = {};
 //End Declare Variables
@@ -192,18 +207,17 @@ const configuring = {
 				//Registers itself and current configuration on the thorium Server
 				/* I'd need to set the client veriable again, and I'm not sure if that'll work or not. */
 				//initializes the circuit into the logical analyzer
-				circuit = {};
-
+				circuit = JSON.parse(data).circuit;
 				//Get the Panel Inputs & outputs from the Circuit, and store them in a key-value map UUID as key
 				for (component in circuit) {
-					if (circuit[component].type = "P-IN") {
+					if (circuit[component].type === "P-IN") {
 
 					}
 				}
 
 				//Get the Panel outputs from the Circuit, and store them in a key-value map UUID as key
 				for (component in circuit) {
-					if (circuit[component].type = "P-OUT") {
+					if (circuit[component].type === "P-OUT") {
 
 					}
 				}
@@ -233,105 +247,90 @@ const spiIN = {
 	},
 	operate: () => {
 		if (debugMode) console.log("Latch");
-		if (debugMode) console.log("Shift in a specified number of bits (Probably based on timing)");
-		if (debugMode) console.log("Load it all into an array, or string");
-		//Start GPIO
-		function setLightValue(TFlightValue) {
-			if (debugMode) console.log(TFlightValue);
-			CE0.writeSync(TFlightValue); //turn CE0 on or off
-			//CE0.pwmWrite(TFlightValue); //PWM (0-255)
-		}
-		//End GPIO
-
-		//Start Running the poller
-		//Chip enable for reading
+		//Start running the poller
+		//Pulse the latch
 		CE0.writeSync(1);
 		CE0.writeSync(0);
+		if (debugMode) console.log("Shift in a specified number of bits and into an array");
 		for (var x = 0; x < MAX_IO; x++) {
-			//write output
-			MOSI.writeSync(inputs[x]);
-			//clock tick
+			//Clock tick
 			SCLK.writeSync(1);
 			SCLK.writeSync(0);
-			//read input
-			//outputs[x] = MISO.readSync();
+			//Read input
+			SPIbitInputs[x] = MISO.readSync();
 		}
-		//Chip enable for writing
-		CE1.writeSync(1);
-		CE1.writeSync(0);
-		//End running the poller
-	},
-	nextState() {
-		FSM = thoriumIN;
-		FSM.inputs = this.inputs;
-		FSM.operate();
-		return FSM.state;
-	},
-}
-
-const thoriumIN = {
-	state: "thoriumIN",
-	inputs: {
-		shutdown: 0,
-		configure: 0,
-		thoriumIsAvailable: 0,
-	},
-	operate: () => {
-		if (FSM.inputs.thoriumIsAvailable) {
-			if (debugMode) console.log("Parse through all of the components that require a thorium server query (Probably already parsed from the configuration state)");
-
-			//Client for graphql
-			let queryVar = `
-{
-  softwarePanels {
-	id
-	name
-	cables {
-	  id
-	  color
-	  components
-	}
-	components {
-	  id
-	  component
-	  level
-	  label
-	  color
-	  x
-	  y
-	  scale
-	}
-	connections {
-	  id
-	  to
-	  from
-	}
-  }
-}
-`;
-			let variables = {
-				query: "Search Query",
-				limit: 100,
-				from: 200
+		if (debugMode) {
+			var outputString = "";
+			for (var x = 0; x < MAX_IO; x++) {
+				outputString += ("Output " + x + " = " + SPIbitInputs[x] + "\t");
 			}
-			//Start the Query to Thorium
-			client.query(queryVar, variables, function(req, res) {
-					if (res.status === 401) {
-						throw new Error('Not authorized');
-					}
-				})
-				.then(function(body) {
-					if (debugMode) console.log(JSON.stringify(body));
-				})
-				.catch(function(err) {
-					if (debugMode) console.log(err.message);
-				})
-			//end the Query to Thorium
-			if (debugMode) console.log("put it into a keyvalue map with the key being the UUID of the component, and the value being the result of the query");
+			console.log(outputString);
+		};
+		//End running the poller
+
+		//Start Bool Parser
+		//Loop through each of the components in the current circuit
+		function bitToFloat(bitArray) {
+			let bitValue = parseInt(bitArray, 2);
+			let bitLength = bitArray.length;
+			return (bitValue)/(Math.pow(2,bitLength)-1);
+		}
+		function floatToBit(Float,bitLength) {
+			let bitValue = Float*(Math.pow(2,bitLength)-1);
+			return Math.round(bitValue);
+		}
+		for (x in circuit) {
+			if (circuit[x].component === "driver") {
+				let dataStartbit = circuit[x].startBit;
+				let dataBitLength = 0;
+				switch (circuit[x].type) {
+					case "button":
+						dataBitLength = 1;
+						break;
+					case "dumbCable":
+						dataBitLength = 1;
+						break;
+					case "fiberCable":
+						dataBitLength = 1;
+						break;
+					case "smartCable":
+						dataBitLength = 1;
+						break;
+					case "2WaySwitch":
+						dataBitLength = 1;
+						break;
+					case "3WaySwitch":
+						dataBitLength = 2;
+						break;
+					case "rotaryEncoder":
+						dataBitLength = 3;
+						break;
+					case "adc":
+						dataBitLength = 8;
+						break;
+					case "chip":
+						dataBitLength = 6;
+						break;
+					case "rod":
+						dataBitLength = 6;
+						break;
+					case "rotarySwitch":
+						dataBitLength = 8;
+						break;
+					default:
+						throw ("Unknown Driver Type " + circuit[x].type);
+				}
+				//Map all of the inputs to their respective components
+				SPIfloatInputs[x] = bitToFloat(SPIbitInputs.slice(dataStartbit,(dataStartbit+dataBitLength)));
+			}
 		}
 	},
 	nextState() {
-		FSM = webIN;
+		if (FSM.inputs.thoriumIsAvailable) {
+			FSM = thoriumIN;
+		} else {
+			FSM = process;
+		}
 		FSM.inputs = this.inputs;
 		FSM.operate();
 		return FSM.state;
@@ -346,7 +345,94 @@ const webIN = {
 		thoriumIsAvailable: 0,
 	},
 	operate: () => {
-		if (debugMode) console.log("grab the stored data from the web inputs (We may not technically need this state, because it should do it's think automatically...)");
+		if (debugMode) console.log("grab the stored data from the web inputs (We may not technically need this state, because it should do it's thing automatically...)");
+		//Stage 1 of the ibuff
+		//Convert floats into string of array based on component types
+		/*
+		WebIN comes in mapped like this
+		{
+			UUID: Float,
+			UUID: Float,
+		}
+		*/
+	},
+	nextState() {
+		FSM = process;
+		FSM.inputs = this.inputs;
+		FSM.operate();
+		return FSM.state;
+	},
+}
+
+const thoriumIN = {
+	state: "thoriumIN",
+	inputs: {
+		shutdown: 0,
+		configure: 0,
+		thoriumIsAvailable: 0,
+	},
+	operate: () => {
+		if (debugMode) console.log("Parse through all of the components that require a thorium server query (Probably already parsed from the configuration state)");
+
+		//Client for graphql
+		let queryVar = `
+{
+	subscription {
+		softwarePanels {
+			id
+			name
+			cables {
+				id
+				color
+				components
+			}
+			components {
+				id
+				component
+				level
+				label
+				color
+				x
+				y
+				scale
+			}
+			connections {
+				id
+				to
+				from
+			}
+		}
+	}
+}
+`;
+		let variables = {
+			query: "Search Query",
+			limit: 100,
+			from: 200
+		}
+		//Start the Query to Thorium
+		client.query(queryVar, variables, function(req, res) {
+				if (res.status === 401) {
+					throw new Error('Not authorized');
+				}
+			})
+			.then(function(body) {
+				if (debugMode) console.log("Thorium Request Received");
+				if (debugMode) console.log(JSON.stringify(body));
+				//Stage 1 of the ibuff
+				/*
+				WebIN comes in mapped like this
+				{
+					UUID: Float,
+					UUID: Float,
+				}
+				*/
+			})
+			.catch(function(err) {
+				if (debugMode) console.log(err.message);
+			})
+		//end the Query to Thorium
+		if (debugMode) console.log("put it into a keyvalue map with the key being the UUID of the component, and the value being the result of the query");
 	},
 	nextState() {
 		FSM = process;
@@ -364,6 +450,52 @@ const process = {
 		thoriumIsAvailable: 0,
 	},
 	operate: () => {
+///////Check Variables\\\\\\\
+
+
+
+//Loop through all of the current inputs, and see what's changed
+//Predicendence goes to Thorium, Web, and then the SPI inputs
+/*
+var SPIfloatInputs = {};
+var WEBinputs = {};
+var THORIUMinputs = {};
+*/
+
+//The logic here may need to be fixed.....
+for (x in circuit) {
+	if (circuit[x].component === "driver") {
+		switch (false) {
+			case ((circuit[x].value === THORIUMinputs[x]) || !FSM.inputs.thoriumIsAvailable):
+			console.log("THORIUMinputs");
+			circuit[x].value = THORIUMinputs[x];
+				break;
+			case (circuit[x].value === WEBinputs[x]):
+			console.log("WEBinputs");
+			circuit[x].value = WEBinputs[x];
+				break;
+			default:
+			console.log("SPIfloatInputs");
+			circuit[x].value = SPIfloatInputs[x];
+				break;
+		}
+		//circuit[x]
+		//START HERE
+		//TODO
+	}
+}
+
+
+
+
+
+
+
+
+
+
+
+
 		//////////Variables\\\\\\\\\\
 		var scheduler = [];
 		var stabilityMap = {};
@@ -554,7 +686,7 @@ const process = {
 				So to prevent that, this is a hard stop, where the circuit will
 				just stop evaluating, and probably throw an error.
 				*/
-				return ("Invalid Logic Found.  Halting Circuit Simulation. Component ID" + uuid);
+				throw ("Invalid Logic Found.  Halting Circuit Simulation. Component ID" + uuid);
 
 			} else if (stabilityMap[uuid] === 7) { //Component is deemed as unstable, it cannot settle on a specific level
 				if (debugMode) { console.log("Component Unstable " + circuit[uuid].component + ": " + uuid); }
@@ -719,12 +851,6 @@ const process = {
 							break;
 						case "BUFF":
 							circuit[uuid].level = inputs[0];
-							break;
-						case "P-IN": //Special buffers for working between HW and SW panels
-							circuit[uuid].level = Math.round(inputs[0]);
-							break;
-						case "P-OUT": //Special buffers for working between HW and SW panels
-							circuit[uuid].level = Math.round(inputs[0]);
 							break;
 							///Mathematic Gates\\\
 						case "ADD":
@@ -985,28 +1111,8 @@ PWR.watch(function(err, value) { //Watch for hardware interrupts on powerButton
 io.sockets.on('connection', function(socket) { // WebSocket Connection
 	//Start Watch vars from Webpage
 	socket.on('IOchange', function(data) { //get light switch status from client
-		console.log("Server got some data!!!");
-		console.log(data);
-		/*
-		if (lightvalue) { //only change CE0 if status has changed
-			for (var x = 0; x < MAX_IO; x++) {
-				if (x % 2) {
-					inputs[x] = 1;
-				} else {
-					inputs[x] = 0;
-				}
-			}
-		} else {
-			for (var x = 0; x < MAX_IO; x++) {
-				if (x % 2) {
-					inputs[x] = 0;
-				} else {
-					inputs[x] = 1;
-				}
-			}
-		}
-		if (debugMode) console.log(data);
-		*/
+		if (debugMode) console.log("Web Change " + JSON.stringify(data));
+		WEBinputs[data.component] = data.value;
 	});
 	//End Watch vars from Webpage
 });
