@@ -273,10 +273,11 @@ const spiIN = {
 		function bitToFloat(bitArray) {
 			let bitValue = parseInt(bitArray, 2);
 			let bitLength = bitArray.length;
-			return (bitValue)/(Math.pow(2,bitLength)-1);
+			return (bitValue) / (Math.pow(2, bitLength) - 1);
 		}
-		function floatToBit(Float,bitLength) {
-			let bitValue = Float*(Math.pow(2,bitLength)-1);
+
+		function floatToBit(Float, bitLength) {
+			let bitValue = Float * (Math.pow(2, bitLength) - 1);
 			return Math.round(bitValue);
 		}
 		for (x in circuit) {
@@ -321,7 +322,7 @@ const spiIN = {
 						throw ("Unknown Driver Type " + circuit[x].type);
 				}
 				//Map all of the inputs to their respective components
-				SPIfloatInputs[x] = bitToFloat(SPIbitInputs.slice(dataStartbit,(dataStartbit+dataBitLength)));
+				SPIfloatInputs[x] = bitToFloat(SPIbitInputs.slice(dataStartbit, (dataStartbit + dataBitLength)));
 			}
 		}
 	},
@@ -450,41 +451,110 @@ const process = {
 		thoriumIsAvailable: 0,
 	},
 	operate: () => {
-///////Check Variables\\\\\\\
+		///////Check Variables\\\\\\\
 
 
 
-//Loop through all of the current inputs, and see what's changed
-//Predicendence goes to Thorium, Web, and then the SPI inputs
-/*
-var SPIfloatInputs = {};
-var WEBinputs = {};
-var THORIUMinputs = {};
-*/
+		//Loop through all of the current inputs, and see what's changed
+		//Predicendence goes to Thorium, Web, and then the SPI inputs
+		/*
+		var SPIfloatInputs = {};
+		var WEBinputs = {};
+		var THORIUMinputs = {};
+		*/
 
-//The logic here may need to be fixed.....
-for (x in circuit) {
-	if (circuit[x].component === "driver") {
-		switch (false) {
-			case ((circuit[x].value === THORIUMinputs[x]) || !FSM.inputs.thoriumIsAvailable):
-			console.log("THORIUMinputs");
-			circuit[x].value = THORIUMinputs[x];
-				break;
-			case (circuit[x].value === WEBinputs[x]):
-			console.log("WEBinputs");
-			circuit[x].value = WEBinputs[x];
-				break;
-			default:
-			console.log("SPIfloatInputs");
-			circuit[x].value = SPIfloatInputs[x];
-				break;
+		/*
+		for (x in circuit) {
+			if (circuit[x].component === "driver") {
+				if (!FSM.inputs.thoriumIsAvailable && WEBinputs[x] == undefined) {
+					circuit[x].value = SPIfloatInputs[x];
+				} else if (!FSM.inputs.thoriumIsAvailable && WEBinputs[x] != undefined) {
+					circuit[x].value = WEBinputs[x];
+				} else if (FSM.inputs.thoriumIsAvailable && WEBinputs[x] == undefined) {
+					if (THORIUMinputs[x] == circuit[x].value) {
+						circuit[x].value = SPIfloatInputs[x];
+					} else if (THORIUMinputs[x] != circuit[x].value) {
+						circuit[x].value = THORIUMinputs[x];
+					} else {
+						throw "Bee-do-bee-do-bee-do";
+					}
+				} else if (FSM.inputs.thoriumIsAvailable && WEBinputs[x] != undefined) {
+					circuit[x].value = WEBinputs[x]
+				} else {
+					throw "Bee-do-bee-do-bee-do";
+				}
+			}
 		}
-		//circuit[x]
-		//START HERE
-		//TODO
-	}
-}
+		*/
 
+		for (x in circuit) {
+			if (circuit[x].component === "driver") {
+				switch (true) {
+					case (WEBinputs[x] != undefined):
+						circuit[x].value = WEBinputs[x];
+						break;
+					case (!FSM.inputs.thoriumIsAvailable):
+						circuit[x].value = SPIfloatInputs[x];
+						break;
+					case (THORIUMinputs[x] == circuit[x].value):
+						circuit[x].value = SPIfloatInputs[x];
+						break;
+					case (THORIUMinputs[x] != circuit[x].value):
+						circuit[x].value = THORIUMinputs[x];
+						break;
+					default:
+						throw "Bee-do-bee-do-bee-do";
+						break;
+				}
+			}
+			delete WEBinputs[x];
+			delete THORIUMinputs[x];
+			delete SPIfloatInputs[x];
+		}
+
+
+		/*
+		for (x in circuit) {
+			if (circuit[x].component === "driver") {
+				if (WEBinputs[x] != undefined) {
+					circuit[x].value = WEBinputs[x];
+				} else if (!FSM.inputs.thoriumIsAvailable) {
+					circuit[x].value = SPIfloatInputs[x];
+				} else if (THORIUMinputs[x] == circuit[x].value) {
+					circuit[x].value = SPIfloatInputs[x];
+				} else if (THORIUMinputs[x] != circuit[x].value) {
+					circuit[x].value = THORIUMinputs[x];
+				} else {
+					throw "Bee-do-bee-do-bee-do";
+				}
+			}
+		}
+		*/
+
+		/*
+		//The logic here may need to be fixed.....
+		for (x in circuit) {
+			if (circuit[x].component === "driver") {
+				switch (false) {
+					case ((circuit[x].value === THORIUMinputs[x]) || !FSM.inputs.thoriumIsAvailable):
+					console.log("THORIUMinputs");
+					circuit[x].value = THORIUMinputs[x];
+						break;
+					case (circuit[x].value === WEBinputs[x]):
+					console.log("WEBinputs");
+					circuit[x].value = WEBinputs[x];
+						break;
+					default:
+					console.log("SPIfloatInputs");
+					circuit[x].value = SPIfloatInputs[x];
+						break;
+				}
+				//circuit[x]
+				//START HERE
+				//TODO
+			}
+		}
+		*/
 
 
 
