@@ -271,14 +271,15 @@ const spiIN = {
 		//Start Bool Parser
 		//Loop through each of the components in the current circuit
 		function bitToFloat(bitArray) {
-			let bitValue = parseInt(bitArray, 2);
 			let bitLength = bitArray.length;
-			return (bitValue) / (Math.pow(2, bitLength) - 1);
-		}
-
-		function floatToBit(Float, bitLength) {
-			let bitValue = Float * (Math.pow(2, bitLength) - 1);
-			return Math.round(bitValue);
+			let floatTotal = 0;
+			let intMax = Math.pow(2, bitLength) - 1;
+			for (x = 0; x < bitLength; x++) {
+				if (bitArray[bitLength - x - 1] != 0) {
+					floatTotal += Math.pow(2, x) / intMax;
+				}
+			}
+			return floatTotal;
 		}
 		for (x in circuit) {
 			if (circuit[x].component === "driver") {
@@ -325,6 +326,7 @@ const spiIN = {
 				SPIfloatInputs[x] = bitToFloat(SPIbitInputs.slice(dataStartbit, (dataStartbit + dataBitLength)));
 			}
 		}
+		console.log(SPIfloatInputs);
 	},
 	nextState() {
 		if (FSM.inputs.thoriumIsAvailable) {
@@ -452,41 +454,6 @@ const process = {
 	},
 	operate: () => {
 		///////Check Variables\\\\\\\
-
-
-
-		//Loop through all of the current inputs, and see what's changed
-		//Predicendence goes to Thorium, Web, and then the SPI inputs
-		/*
-		var SPIfloatInputs = {};
-		var WEBinputs = {};
-		var THORIUMinputs = {};
-		*/
-
-		/*
-		for (x in circuit) {
-			if (circuit[x].component === "driver") {
-				if (!FSM.inputs.thoriumIsAvailable && WEBinputs[x] == undefined) {
-					circuit[x].value = SPIfloatInputs[x];
-				} else if (!FSM.inputs.thoriumIsAvailable && WEBinputs[x] != undefined) {
-					circuit[x].value = WEBinputs[x];
-				} else if (FSM.inputs.thoriumIsAvailable && WEBinputs[x] == undefined) {
-					if (THORIUMinputs[x] == circuit[x].value) {
-						circuit[x].value = SPIfloatInputs[x];
-					} else if (THORIUMinputs[x] != circuit[x].value) {
-						circuit[x].value = THORIUMinputs[x];
-					} else {
-						throw "Bee-do-bee-do-bee-do";
-					}
-				} else if (FSM.inputs.thoriumIsAvailable && WEBinputs[x] != undefined) {
-					circuit[x].value = WEBinputs[x]
-				} else {
-					throw "Bee-do-bee-do-bee-do";
-				}
-			}
-		}
-		*/
-
 		for (x in circuit) {
 			if (circuit[x].component === "driver") {
 				switch (true) {
@@ -511,60 +478,6 @@ const process = {
 			delete THORIUMinputs[x];
 			delete SPIfloatInputs[x];
 		}
-
-
-		/*
-		for (x in circuit) {
-			if (circuit[x].component === "driver") {
-				if (WEBinputs[x] != undefined) {
-					circuit[x].value = WEBinputs[x];
-				} else if (!FSM.inputs.thoriumIsAvailable) {
-					circuit[x].value = SPIfloatInputs[x];
-				} else if (THORIUMinputs[x] == circuit[x].value) {
-					circuit[x].value = SPIfloatInputs[x];
-				} else if (THORIUMinputs[x] != circuit[x].value) {
-					circuit[x].value = THORIUMinputs[x];
-				} else {
-					throw "Bee-do-bee-do-bee-do";
-				}
-			}
-		}
-		*/
-
-		/*
-		//The logic here may need to be fixed.....
-		for (x in circuit) {
-			if (circuit[x].component === "driver") {
-				switch (false) {
-					case ((circuit[x].value === THORIUMinputs[x]) || !FSM.inputs.thoriumIsAvailable):
-					console.log("THORIUMinputs");
-					circuit[x].value = THORIUMinputs[x];
-						break;
-					case (circuit[x].value === WEBinputs[x]):
-					console.log("WEBinputs");
-					circuit[x].value = WEBinputs[x];
-						break;
-					default:
-					console.log("SPIfloatInputs");
-					circuit[x].value = SPIfloatInputs[x];
-						break;
-				}
-				//circuit[x]
-				//START HERE
-				//TODO
-			}
-		}
-		*/
-
-
-
-
-
-
-
-
-
-
 
 		//////////Variables\\\\\\\\\\
 		var scheduler = [];
@@ -1045,8 +958,151 @@ const spiOUT = {
 		thoriumIsAvailable: 0,
 	},
 	operate: () => {
-		if (debugMode) console.log("Shift in a specified number of bits (Probably based on timing)");
+
+
+
+		/*
+
+		const MAX_IO = 100;
+		var SPIbitOutputs = [];
+		var SPIbitInputs = [];
+		var SPIfloatOutputs = {};
+		var SPIfloatInputs = {};
+		var WEBoutputs = {};
+		var WEBinputs = {};
+		var THORIUMoutputs = {};
+		var THORIUMinputs = {};
+		for (var x = 0; x < MAX_IO; x++) {
+			SPIbitInputs[x] = -1;
+		}
+		var debugMode = false;
+		var isAPi = false;
+		var circuit = {};
+
+
+		circuit[x]
+
+		*/
+
+
+
+		//Ok, so everything is in the circuit
+		//Loop through circuit, and put all of the emitters into SPIfloatOutputs
+		for (x in circuit) {
+			if (circuit[x].component === "emitter") {
+				SPIfloatOutputs[x] = circuit[x].value;
+			}
+		}
+		//loop through SPIfloatOutputs, and convert them into the bit lengths,
+		//and insert them into the SPIbitOutputs
+		function floatToBit(floatTotal, bitLength) {
+			let intMax = Math.pow(2, bitLength) - 1;
+			floatTotal = Math.min(Math.max(0, floatTotal), 1);
+			let binaryString = Math.round(intMax * floatTotal);
+			binaryString = parseInt(binaryString, 10);
+			binaryString = binaryString.toString(2);
+			let binary = [];
+			for (x = 0;
+				(binary.length + binaryString.length) < bitLength; x++) {
+				binary[x] = 0;
+			}
+			let appendedZeros = binary.length;
+			for (x = 0; x < binaryString.length; x++) {
+				binary[appendedZeros + x] = parseInt(binaryString[x]);
+			}
+			return binary;
+		}
+
+
+		for (x in SPIfloatOutputs) {
+			let dataStartbit = circuit[x].startBit;
+			let dataBitLength = 0;
+			switch (circuit[x].type) {
+				case "LED":
+					dataBitLength = 1;
+					break;
+				case "DimmableLED":
+					dataBitLength = 8;
+					break;
+				case "Voltmeter":
+					dataBitLength = 8;
+					break;
+				case "Speaker":
+					dataBitLength = 8;
+					break;
+				case "Servo":
+					dataBitLength = 8;
+					break;
+				case "RGBLED":
+					dataBitLength = 3;
+					break;
+				case "DimmableRGBLED":
+					dataBitLength = 24;
+					break;
+				case "LCD":
+					dataBitLength = 8;
+					break;
+				case "7seg":
+					dataBitLength = 8;
+					break;
+				case "LEDBar":
+					dataBitLength = 10;
+					break;
+				case "SmartCable":
+					dataBitLength = 1;
+					break;
+				case "Buzzer":
+					dataBitLength = 1;
+					break;
+				case "Fiberlight":
+					dataBitLength = 1;
+					break;
+				case "Motor":
+					dataBitLength = 1;
+					break;
+				case "Electro-MagLock":
+					dataBitLength = 1;
+					break;
+				default:
+					throw ("Unknown Emitter Type " + circuit[x].type);
+			}
+			//Value comes in as a float, and then I need to 
+			//Map all of the inputs to their respective components
+			var temp = floatToBit(SPIfloatOutputs[x], dataBitLength);
+			for (y = 0; y < dataBitLength; y++) {
+				SPIbitOutputs[dataStartbit + y] = temp[y];
+			}
+		}
+//		console.log(SPIfloatOutputs);
+//		console.log(SPIbitOutputs);
+
+
+
+		//Latch
 		if (debugMode) console.log("Latch");
+		//Start running the poller
+		//Pulse the latch
+		CE1.writeSync(1);
+		CE1.writeSync(0);
+
+
+		//Load the SPI outputs into the system
+		if (debugMode) console.log("Shift in a specified number of bits and into an array");
+		for (var x = 0; x < MAX_IO; x++) {
+			//Write Output
+			MOSI.writeSync(SPIbitOutputs[x])
+			//Clock tick
+			SCLK.writeSync(1);
+			SCLK.writeSync(0);
+		}
+		if (debugMode) {
+			var outputString = "";
+			for (var x = 0; x < MAX_IO; x++) {
+				outputString += ("Output " + x + " = " + SPIbitOutputs[x] + "\t");
+			}
+			console.log(outputString);
+		};
+		//End running the poller
 	},
 	nextState() {
 		FSM = thoriumOUT;

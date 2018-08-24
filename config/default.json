@@ -46,7 +46,7 @@
             "startBit":0,
 
             "component": "emitter",
-            "type": "emitter",
+            "type": "LED",
             "level": -1,
             "to": [],
             "from": ["330e72a5-c989-4df6-a97b-4e8c76d24b95"]
