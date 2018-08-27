@@ -4,7 +4,7 @@ function addNewPart(GUID, partInfo) {
 	switch (component) {
 		case "emitter":
 			switch (type) {
-				case "emitter":
+				case "LED":
 					var list = document.getElementById("outputs");
 					var output = document.createElement("input"); //Create the option
 					output.setAttribute("type", "checkbox"); //set the value
@@ -17,6 +17,8 @@ function addNewPart(GUID, partInfo) {
 					list.appendChild(label);
 					list.appendChild(br);
 					break;
+				default:
+					throw ("Unknown Emitter Type " + type);
 			}
 			addWebSocketListener(GUID);
 			break;

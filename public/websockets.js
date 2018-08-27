@@ -27,3 +27,5 @@ socket.on("IOchange", function(data) { //get button status from server
 	document.getElementById(data.component).checked = data.value; //change checkbox according to push button on Raspberry Pi
 	//socket.emit("IOchange", data); //send push button status to back to server
 });
+
+//I might need to add a little something, so when the web UI loads, it updates all of the values on the screen
