@@ -5,6 +5,7 @@ Make sure that "isoProgram" is in the cron jobs <crontab -e>, and that it starts
 
 
 ## Pin configuration
+```
                74HC595 SIPO
 Output <=   QB  | 01  16 | Vcc     => 5v
 Output <=   QC  | 02  15 | QA      => Output
@@ -14,7 +15,9 @@ Output <=   QF  | 05  12 | RCLK    => CE1
 Output <=   QG  | 06  11 | SRCLK   => SCLK
 Output <=   QH  | 07  10 | SRCLR   => 5v
 GND    <=   GND | 08  09 | QH'     => SER Out
+```
 
+```
                   74HC165 PISO
 LOAD   <=   SH/LD  | 01  16 | Vcc      => 5v
 SCLK   <=   CLK    | 02  15 | CLK INH  => GND
@@ -24,7 +27,9 @@ Input  <=   G      | 05  12 | B        => Input
 Input  <=   H      | 06  11 | A        => Input
             QH'    | 07  10 | SER      => SER In
 GND    <=   GND    | 08  09 | QH       => SER Out (MISO)
+```
 
+```
                Raspberry Pi
         3.3v   | 01  02 | 5v
         GPIO2  | 03  04 | 5v
@@ -47,7 +52,7 @@ SCLK <= GPIO11 | 23  24 | GPIO8  => CE0
      <= GPIO19 | 35  36 | GPIO16 =>
      <= GPIO26 | 37  38 | GPIO20 =>
         GND    | 39  40 | GPIO21 =>
-
+```
 
 
 
@@ -78,9 +83,8 @@ Get the Panel outputs from the Circuit, and store them in a key-value map  UUID 
 Get the thorium mutations and store them in keyvalue map with the UUID as key
 
 
-
-
 ## This is for the logical analyzer data structures
+```
 var scheduler = [ /*uuid,uuid,...*/ ];
 
 var circuit = {
@@ -115,3 +119,4 @@ var stabilityMap = {
     ,...
     */
 };
+```
