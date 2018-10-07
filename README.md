@@ -120,3 +120,19 @@ var stabilityMap = {
     */
 };
 ```
+
+
+
+## Setting up the Pi
+* Install Raspbian on the pi
+* Access the Command line
+* run the follwoing: ```sudo apt upgrade
+sudo apt update
+sudo apt install node
+sudo apt install npm
+cd ~
+git checkout https://github.com/Emrix/sapphire-panels.git && cd sapphire-panels
+git checkout node_mvp
+npm install
+npm start```
+* open up a browswer window, and navigate to the pi's IP address.
