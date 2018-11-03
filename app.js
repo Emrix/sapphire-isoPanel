@@ -478,7 +478,7 @@ const process = {
                         circuit[x].level = THORIUMinputs[x];
                         break;
                     default:
-                        throw "Bee-do-bee-do-bee-do";
+                        throw "Bee-doh-bee-doh-bee-doh";
                         break;
                 }
             }
