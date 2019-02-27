@@ -1,12 +1,12 @@
 {
-    "63d9acea-299f-439c-884b-f11eb1f14fc0":
+    "4ff1d3e7-6472-4cfb-89fa-74370ff08d74":
     {
         "_label": "New driver",
         "_x": 1,
         "_y": 1,
         "_scale": 1,
         "_startBit": 0,
-        "_id": "63d9acea-299f-439c-884b-f11eb1f14fc0",
+        "_id": "4ff1d3e7-6472-4cfb-89fa-74370ff08d74",
         "_bitLength": 1,
         "_componentClass": "driver",
         "_type": "generic",
@@ -17,7 +17,7 @@
             "Q":
             {
                 "_value": -1,
-                "_tocomponent": "2296124d-33bb-4873-8f82-41e5ef37fa1a",
+                "_tocomponent": "31146090-aee0-477a-a747-3635b6694390",
                 "_toConnector": "A"
             }
         },
@@ -26,17 +26,17 @@
             "mem": 1
         }
     },
-    "2296124d-33bb-4873-8f82-41e5ef37fa1a":
+    "31146090-aee0-477a-a747-3635b6694390":
     {
         "_label": "New gate",
         "_x": 1,
         "_y": 1,
         "_scale": 1,
         "_startBit": -1,
-        "_id": "2296124d-33bb-4873-8f82-41e5ef37fa1a",
+        "_id": "31146090-aee0-477a-a747-3635b6694390",
         "_bitLength": 0,
         "_componentClass": "gate",
-        "_type": "NOT",
+        "_type": "generic",
         "_inputs":
         {
             "A": -1
@@ -46,21 +46,23 @@
             "Q":
             {
                 "_value": -1,
-                "_tocomponent": "8d39e5ce-1d46-4bc8-a7ab-fce05631339e",
+                "_tocomponent": "42dd3a99-3897-461d-a433-3f17db021d94",
                 "_toConnector": "A"
             }
         },
         "_memory":
-        {}
+        {
+            "mem": 1
+        }
     },
-    "8d39e5ce-1d46-4bc8-a7ab-fce05631339e":
+    "42dd3a99-3897-461d-a433-3f17db021d94":
     {
         "_label": "New emitter",
         "_x": 1,
         "_y": 1,
         "_scale": 1,
         "_startBit": 0,
-        "_id": "8d39e5ce-1d46-4bc8-a7ab-fce05631339e",
+        "_id": "42dd3a99-3897-461d-a433-3f17db021d94",
         "_bitLength": 1,
         "_componentClass": "emitter",
         "_type": "generic",

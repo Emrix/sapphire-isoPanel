@@ -1,4 +1,4 @@
-exports.run = function(sclk,cs,MISO,MAX_IO) {
+module.exports = function(sclk,cs,MISO,MAX_IO) {
     var SPIbitInputs = [];
     cs.writeSync(1);
     cs.writeSync(0);
