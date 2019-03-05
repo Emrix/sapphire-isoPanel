@@ -1,135 +1,12 @@
 var configFile = "default.json";
 
-//Start Create server
-var handler = (req, res) => {
-    var itemToSend = "";
-    var mimeType = "";
-    var loadFile = false;
-    var request = req.url;
-    request = request.split("?");
-    switch (request[0]) {
-        case ("/configuration.js"):
-            itemToSend = "/public/configuration.js";
-            mimeType = "application/javascript";
-            loadFile = true;
-            break;
-        case ("/websockets.js"):
-            itemToSend = "/public/websockets.js";
-            mimeType = "application/javascript";
-            loadFile = true;
-            break;
-        case ("/index.css"):
-            itemToSend = "/public/index.css";
-            var mimeType = "text/css";
-            loadFile = true;
-            break;
-        case ("/loadConfig"):
-            var itemToSend = request[1];
-            itemToSend = itemToSend.replace("../", "./");
-            configFile = itemToSend;
-            FSM.inputs.configure = 1;
-            itemToSend = "/config/" + itemToSend;
-            var mimeType = "application/json";
-            loadFile = true;
-            break;
-        case ("/configList"):
-            itemToSend = "/config/";
-            var mimeType = "text/plain";
-            loadFile = false;
-            break;
-        default:
-            itemToSend = "/public/index.html";
-            var mimeType = "text/html";
-            loadFile = true;
-            break;
-    }
-
-    if (loadFile) {
-        fs.readFile((__dirname + itemToSend), function(err, data) { //read file index.html in public folder
-            if (err) {
-                res.writeHead(404, { 'Content-Type': 'text/html' }); //display 404 on error
-                return res.end("404 Not Found");
-            }
-            res.writeHead(200, { 'Content-Type': mimeType }); //write HTML
-            res.write(data); //write data from index.html
-            if (debugMode) console.log("Web User loaded Page");
-            return res.end();
-        });
-    } else {
-        switch (itemToSend) {
-            case "/config/":
-                //                fs.readdir((__dirname + itemToSend), (err, files) => {
-                fs.readdir(__dirname + itemToSend, (err, files) => {
-                    if (err) {
-                        res.writeHead(404, { 'Content-Type': 'text/html' }); //display 404 on error
-                        return res.end("404 Not Found");
-                    }
-                    files = JSON.stringify(files);
-                    res.writeHead(200, { 'Content-Type': mimeType }); //write HTML
-                    res.write(files);
-                    return res.end();
-                })
-                break;
-            default:
-                res.writeHead(404, { 'Content-Type': 'text/html' }); //display 404 on error
-                return res.end("404 Not Found");
-                break;
-        }
-    }
-}
-//End Create server
 
 //Start Libraries
-var http = require('http').createServer(handler); //require http server, and create server with handler()
 var fs = require('fs'); //require filesystem module
-var io = require('socket.io')(http) //require socket.io module and pass the http object (server)
-if (isAPi) {
-    var Gpio = require('onoff').Gpio; //include onoff to interact with the GPIO
-} else {
-    var Gpio = { //This is a mock GPIO library so that the code will still work outside of a raspberry pi. This is used for debugging.
-        writeSync: () => {},
-        unexport: () => {},
-        watch: () => {},
-        readSync: () => {
-        	return 1;
-            var y = Math.random();
-            if (y < 0.5) {
-                y = Math.floor(y)
-            } else {
-                y = Math.ceil(y)
-            }
-            return y;
-            //return 0;
-        }
-    }
-}
 var uuidv4 = require('uuid/v4');
-//Bonjour
-var bonjour = require('bonjour')()
-var thoriumServer;
-var client;
-//End Bonjour
 //End Libraries
 
-//Start Declare Pins here
-if (isAPi) {
-    var CE0 = new Gpio(8, 'out'); //Should be 8
-    var CE1 = new Gpio(7, 'out');
-    var SCLK = new Gpio(11, 'out');
-    var MOSI = new Gpio(10, 'out');
-    var MISO = new Gpio(9, 'in', 'both');
-    var PWR = new Gpio(23, 'in', 'both');
-} else {
-    var CE0 = Gpio;
-    var CE1 = Gpio;
-    var SCLK = Gpio;
-    var MOSI = Gpio;
-    var MISO = Gpio;
-    var PWR = Gpio;
-}
-var outputPins = [CE0, CE1, SCLK, MOSI];
-var inputPins = [MISO, PWR];
-//End declaring pins
+
 
 //Start Declare Variables
 const MAX_IO = 100;
@@ -137,15 +14,8 @@ var SPIbitOutputs = [];
 var SPIbitInputs = [];
 var SPIfloatOutputs = {};
 var SPIfloatInputs = {};
-var WEBoutputs = {};
-var WEBinputs = {};
-var THORIUMoutputs = {};
-var THORIUMinputs = {};
-for (var x = 0; x < MAX_IO; x++) {
-    SPIbitInputs[x] = -1;
-}
+
 var debugMode = true;
-var isAPi = false;
 var oldcircuitString = {};
 var circuit = {};
 //End Declare Variables
@@ -155,42 +25,6 @@ var circuit = {};
 
 
 
-const initialize = {
-    state: "initialize",
-    inputs: {
-        shutdown: 0,
-        configure: 0,
-        thoriumIsAvailable: 0,
-    },
-    operate: () => {
-        //Start WebServer
-        http.listen(8080);
-        //End WebServer
-
-        //Start Bonjour
-        bonjour.find({ type: 'thorium-http' }, function(service) {
-            var thoriumServer = service.addresses[0];
-            if (debugMode) console.log('Found an HTTP server:', service)
-            //GraphQL
-            client = require('graphql-client')({
-                url: "http://" + thoriumServer + ":3001/graphql",
-                //url: "http://192.168.1.203:3001/graphql",
-                headers: {
-                    //Authorization: 'Bearer ' + token
-                }
-            })
-            //EndGraphQL
-            FSM.inputs.thoriumIsAvailable = 1;
-        })
-        //End Bonjour
-    },
-    nextState() {
-        FSM = configuring;
-        FSM.inputs = this.inputs;
-        FSM.operate();
-        return FSM.state;
-    },
-}
 
 const configuring = {
     state: "configuring",
@@ -252,15 +86,15 @@ const spiIN = {
         if (debugMode) console.log("Latch");
         //Start running the poller
         //Pulse the latch
-        CE0.writeSync(1);
-        CE0.writeSync(0);
+        //CE0.writeSync(1);
+        //CE0.writeSync(0);
         if (debugMode) console.log("Shift in a specified number of bits and into an array");
         for (var x = 0; x < MAX_IO; x++) {
             //Clock tick
-            SCLK.writeSync(1);
-            SCLK.writeSync(0);
+            //SCLK.writeSync(1);
+            //SCLK.writeSync(0);
             //Read input
-            SPIbitInputs[x] = MISO.readSync();
+            //SPIbitInputs[x] = MISO.readSync();
         }
         if (debugMode) {
             var outputString = "";
@@ -332,115 +166,6 @@ const spiIN = {
         //console.log(SPIfloatInputs);
     },
     nextState() {
-        if (FSM.inputs.thoriumIsAvailable) {
-            FSM = thoriumIN;
-        } else {
-            FSM = process;
-        }
-        FSM.inputs = this.inputs;
-        FSM.operate();
-        return FSM.state;
-    },
-}
-
-const webIN = {
-    state: "webIN",
-    inputs: {
-        shutdown: 0,
-        configure: 0,
-        thoriumIsAvailable: 0,
-    },
-    operate: () => {
-        if (debugMode) console.log("grab the stored data from the web inputs (We may not technically need this state, because it should do it's thing automatically...)");
-        //Stage 1 of the ibuff
-        //Convert floats into string of array based on component types
-        /*
-        WebIN comes in mapped like this
-        {
-        	UUID: Float,
-        	UUID: Float,
-        }
-        */
-    },
-    nextState() {
-        FSM = process;
-        FSM.inputs = this.inputs;
-        FSM.operate();
-        return FSM.state;
-    },
-}
-
-const thoriumIN = {
-    state: "thoriumIN",
-    inputs: {
-        shutdown: 0,
-        configure: 0,
-        thoriumIsAvailable: 0,
-    },
-    operate: () => {
-        if (debugMode) console.log("Parse through all of the components that require a thorium server query (Probably already parsed from the configuration state)");
-
-        //Client for graphql
-        let queryVar = `
-{
-	subscription {
-		softwarePanels {
-			id
-			name
-			cables {
-				id
-				color
-				components
-			}
-			components {
-				id
-				component
-				level
-				label
-				color
-				x
-				y
-				scale
-			}
-			connections {
-				id
-				to
-				from
-			}
-		}
-	}
-}
-`;
-        let variables = {
-            query: "Search Query",
-            limit: 100,
-            from: 200
-        }
-        //Start the Query to Thorium
-        client.query(queryVar, variables, function(req, res) {
-                if (res.status === 401) {
-                    throw new Error('Not authorized');
-                }
-            })
-            .then(function(body) {
-                if (debugMode) console.log("Thorium Request Received");
-                if (debugMode) console.log(JSON.stringify(body));
-                //Stage 1 of the ibuff
-                /*
-                WebIN comes in mapped like this
-                {
-                	UUID: Float,
-                	UUID: Float,
-                }
-                */
-            })
-            .catch(function(err) {
-                if (debugMode) console.log(err.message);
-            })
-        //end the Query to Thorium
-        if (debugMode) console.log("put it into a keyvalue map with the key being the UUID of the component, and the value being the result of the query");
-    },
-    nextState() {
         FSM = process;
         FSM.inputs = this.inputs;
         FSM.operate();
@@ -466,25 +191,25 @@ const process = {
         for (x in circuit) {
             if (circuit[x].component === "driver") {
                 switch (true) {
-                    case (WEBinputs[x] != undefined):
-                        circuit[x].level = WEBinputs[x];
-                        break;
+                    //case (WEBinputs[x] != undefined):
+                        //circuit[x].level = WEBinputs[x];
+                        //break;
                     case (!FSM.inputs.thoriumIsAvailable):
                         circuit[x].level = SPIfloatInputs[x];
                         break;
-                    case (THORIUMinputs[x] == circuit[x].level):
-                        circuit[x].level = SPIfloatInputs[x];
-                        break;
-                    case (THORIUMinputs[x] != circuit[x].level):
-                        circuit[x].level = THORIUMinputs[x];
-                        break;
+                    //case (THORIUMinputs[x] == circuit[x].level):
+                        //circuit[x].level = SPIfloatInputs[x];
+                        //break;
+                    //case (THORIUMinputs[x] != circuit[x].level):
+                        //circuit[x].level = THORIUMinputs[x];
+                        //break;
                     default:
                         throw "Bee-doh-bee-doh-bee-doh";
                         break;
                 }
             }
-            delete WEBinputs[x];
-            delete THORIUMinputs[x];
+            //delete WEBinputs[x];
+            //delete THORIUMinputs[x];
             delete SPIfloatInputs[x];
         }
         scheduleComponent();
@@ -943,9 +668,7 @@ const process = {
         if (debugMode) console.log("we need to increment some sort of clock for the Logical analyzer.  Actually, the components themselves might do this...");
     },
     nextState() {
-        if (this.inputs.shutdown) {
-            FSM = shutdown;
-        } else if (this.inputs.configure) {
+        if (this.inputs.configure) {
             FSM = configuring;
         } else if (oldcircuitString != JSON.stringify(circuit)) {
             FSM = spiOUT;
@@ -1062,18 +785,18 @@ const spiOUT = {
         if (debugMode) console.log("Latch");
         //Start running the poller
         //Pulse the latch
-        CE1.writeSync(1);
-        CE1.writeSync(0);
+        //CE1.writeSync(1);
+        //CE1.writeSync(0);
 
 
         //Load the SPI outputs into the system
         if (debugMode) console.log("Shift in a specified number of bits and into an array");
         for (var x = 0; x < MAX_IO; x++) {
             //Write Output
-            MOSI.writeSync(SPIbitOutputs[x])
+            //MOSI.writeSync(SPIbitOutputs[x])
             //Clock tick
-            SCLK.writeSync(1);
-            SCLK.writeSync(0);
+            //SCLK.writeSync(1);
+            //SCLK.writeSync(0);
         }
         if (debugMode) {
             var outputString = "";
@@ -1085,102 +808,8 @@ const spiOUT = {
         //End running the poller
     },
     nextState() {
-        if (FSM.inputs.thoriumIsAvailable) {
-            FSM = thoriumOUT;
-        } else {
-            FSM = webOUT;
-        }
+        FSM = configuring;
         FSM.inputs = this.inputs;
-        FSM.operate();
-        return FSM.state;
-    },
-}
-
-const thoriumOUT = {
-    state: "thoriumOUT",
-    inputs: {
-        shutdown: 0,
-        configure: 0,
-        thoriumIsAvailable: 0,
-    },
-    operate: () => {
-        if (debugMode) console.log("Parse through all of the components that require a thorium server mutation (Probably already parsed from the configuration state)");
-        if (debugMode) console.log("Perform the query");
-
-    },
-    nextState() {
-        FSM = webOUT;
-        FSM.inputs = this.inputs;
-        FSM.operate();
-        return FSM.state;
-    },
-}
-
-const webOUT = {
-    state: "webOUT",
-    inputs: {
-        shutdown: 0,
-        configure: 0,
-        thoriumIsAvailable: 0,
-    },
-    operate: () => {
-        if (debugMode) console.log("Update the web UI with the current state of the components & other values");
-        for (GUID in circuit) {
-            if (circuit[GUID].component === "driver" || circuit[GUID].component === "emitter") {
-                let componentValue = circuit[GUID].level;
-                if (componentValue === -1) {
-                    componentValue = 0;
-                    console.log(GUID + " component value is " + -1);
-                }
-                io.sockets.emit("IOchange", {
-                    "component": GUID,
-                    "value": componentValue //This might need tp be changed based on the input
-                }); //send button status to server (as 1 or 0)
-            } else {
-                //It's a gate!  Which we don't care about on the UI!
-            }
-        }
-    },
-    nextState() {
-        FSM = spiIN;
-        FSM.inputs = this.inputs;
-        FSM.operate();
-        return FSM.state;
-    },
-}
-
-const shutdown = {
-    state: "shutdown",
-    inputs: {
-        shutdown: 0,
-        configure: 0,
-        thoriumIsAvailable: 0,
-    },
-    operate: () => {
-        if (debugMode) console.log("Notify Thorium that the panel is shutting down, and may need to ");
-        //Start Clean Up GPIO
-        outputPins.forEach(function(currentValue) { //for each CE0
-            currentValue.writeSync(0); //turn off CE0
-            currentValue.unexport(); //unexport GPIO
-        });
-        inputPins.forEach(function(currentValue) { //for each CE0
-            currentValue.unexport(); //unexport GPIO to free resources
-        });
-        //End Clean Up GPIO
-        //Start Notify Thorium
-
-        //make some sort of query, and unsubscribe from all the things...
-
-        //End Notify Thorium
-        //Start Shutdown Webserver
-        http.close(function() {
-            console.log("Webserver Stopped");
-        });
-        //End Shutdown Webserver
-
-        if (debugMode) console.log("shutdown the pi");
-    },
-    nextState() {
         FSM.operate();
         return FSM.state;
     },
@@ -1188,7 +817,7 @@ const shutdown = {
 
 
 //Start Initialize and run State Machine
-var FSM = initialize; //Initial State
+var FSM = configuring; //Initial State
 FSM.operate(); //Run our initialization State
 
 //Run the State Machine
@@ -1203,48 +832,3 @@ function proceedToNextState() {
 if (debugMode) console.log("starting state machine")
 proceedToNextState();
 //End Initialize and run State Machine
-
-
-
-
-
-
-
-
-
-//Start Input Detections
-//Start Listening for Control - C
-if (isAPi) {
-    process.on('SIGINT', function() {
-        unexportOnClose();
-        process.exit(); //exit completely
-    }); //function to run when user closes using ctrl+c
-}
-//End Listening for Control - C
-
-
-//Start Watch PWR
-PWR.watch(function(err, value) { //Watch for hardware interrupts on powerButton
-    if (err) { //if an error
-        console.error('There was an error', err); //output error message to console
-        return;
-    }
-    console.log("Power button pressed"); //output error message to console
-    //lightvalue = value;
-    //socket.emit('light', lightvalue); //send button status to client
-});
-//End Watch PWR
-
-
-//Start WebSockets
-io.sockets.on('connection', function(socket) { // WebSocket Connection
-    //Start Watch vars from Webpage
-    socket.on('IOchange', function(data) { //get light switch status from client
-        if (debugMode) console.log("Web Change " + JSON.stringify(data));
-        WEBinputs[data.component] = data.value;
-    });
-    //End Watch vars from Webpage
-});
-//End WebSockets
-
-//End Input Detections
