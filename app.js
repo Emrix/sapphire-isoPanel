@@ -21,7 +21,7 @@ if (isAPi) {
 
 //Start Declare Pins here
 if (isAPi) {
-    var CE0 = new Gpio(8, 'out'); //Should be 8
+    var CE0 = new Gpio(8, 'out');
     var CE1 = new Gpio(7, 'out');
     var SCLK = new Gpio(11, 'out');
     var MOSI = new Gpio(10, 'out');
