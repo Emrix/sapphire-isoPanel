@@ -9,11 +9,8 @@ fs.readFile((__dirname + '/circuits/' + configFile + ".json"), { encoding: 'utf-
         //Make sure it's in valid JSON
         circuit = JSON.parse(circuit);
 
-        /*
+
         //Make sure each wire UUID is unique
-        //So, this doesn't actually work, because of how the JSON is formatted.
-        //It'll pick up the first instance of that UUID always, and just go with it
-        //So it'll never detect a duplicate
         for (let key in circuit.rats_nest) {
             for (let anotherkey in circuit.rats_nest) {
                 if (key === anotherkey) {
@@ -24,7 +21,7 @@ fs.readFile((__dirname + '/circuits/' + configFile + ".json"), { encoding: 'utf-
                 }
             }
         }
-        */
+
 
         /*
         //Make sure each component UUID is unique
@@ -39,7 +36,7 @@ fs.readFile((__dirname + '/circuits/' + configFile + ".json"), { encoding: 'utf-
                 }
             }
             if (counter > 1) {
-                throw "Two components have the same ID '" + circuit.rats_nest[key] + "'";
+                throw "Two components have the same ID '" + circuit.components[key] + "'";
             }
         }
         */
@@ -104,21 +101,15 @@ fs.readFile((__dirname + '/circuits/' + configFile + ".json"), { encoding: 'utf-
         //Check to see if there is more than one driving output connected to a wire
         for (let wireKey in circuit.rats_nest) {
             let inputCount = 0;
-            let outputCount = 0;
             for (let componentKey in circuit.components) {
                 for (let componentInput in circuit.components[componentKey].inputs) {
-                    if (circuit.components[componentKey].inputs[componentInput] == wireKey) {
+                    if (circuit.components[componentKey].inputs[componentInput] == circuit.rats_nest[wireKey]) {
                         inputCount++;
-                    }
-                }
-                for (let componentOutput in circuit.components[componentKey].outputs) {
-                    if (circuit.components[componentKey].outputs[componentOutput] == wireKey) {
-                        outputCount++;
                     }
                 }
             }
             if (inputCount > 1) {
-                throw ("Wire " + wireKey + " has multiple inputs");
+                throw ("Wire " + circuit.rats_nest[wireKey] + " has multiple inputs");
             }
         }
 
@@ -128,21 +119,21 @@ fs.readFile((__dirname + '/circuits/' + configFile + ".json"), { encoding: 'utf-
             let outputCount = 0;
             for (let componentKey in circuit.components) {
                 for (let componentInput in circuit.components[componentKey].inputs) {
-                    if (circuit.components[componentKey].inputs[componentInput] == wireKey) {
+                    if (circuit.components[componentKey].inputs[componentInput] == circuit.rats_nest[wireKey]) {
                         inputCount++;
                     }
                 }
                 for (let componentOutput in circuit.components[componentKey].outputs) {
-                    if (circuit.components[componentKey].outputs[componentOutput] == wireKey) {
+                    if (circuit.components[componentKey].outputs[componentOutput] == circuit.rats_nest[wireKey]) {
                         outputCount++;
                     }
                 }
             }
             if (inputCount == 0) {
-                console.log("WARNING: Wire " + wireKey + " has no input connections.");
+                console.log("WARNING: Wire " + circuit.rats_nest[wireKey] + " has no input connections.");
             }
             if (outputCount == 0) {
-                console.log("WARNING: Wire " + wireKey + " has no output connections.");
+                console.log("WARNING: Wire " + circuit.rats_nest[wireKey] + " has no output connections.");
             }
         }
 
@@ -152,10 +143,32 @@ fs.readFile((__dirname + '/circuits/' + configFile + ".json"), { encoding: 'utf-
                 if (circuit.components[componentKey].inputs[componentInput] == "") {
                     console.log("WARNING: Input " + componentInput + " on Component " + componentKey + " has no wire connections.");
                 }
+                if (circuit.components[componentKey].type != "driver") {
+                    let matchesWireKey = false;
+                    for (let wireKey in circuit.rats_nest) {
+                        if (circuit.components[componentKey].inputs[componentInput] == circuit.rats_nest[wireKey]) {
+                            matchesWireKey = true;
+                        }
+                    }
+                    if (!matchesWireKey) {
+                        console.log("WARNING: Input " + componentInput + " on Component " + componentKey + " connects to a wire that doesn't exist! (" + circuit.components[componentKey].inputs[componentInput] + ")");
+                    }
+                }
             }
             for (let componentOutput in circuit.components[componentKey].outputs) {
                 if (circuit.components[componentKey].outputs[componentOutput] == "") {
                     console.log("WARNING: Output " + componentOutput + " on Component " + componentKey + " has no wire connections.");
+                }
+                if (circuit.components[componentKey].type != "emitter") {
+                    let matchesWireKey = false;
+                    for (let wireKey in circuit.rats_nest) {
+                        if (circuit.components[componentKey].outputs[componentOutput] == circuit.rats_nest[wireKey]) {
+                            matchesWireKey = true;
+                        }
+                    }
+                    if (!matchesWireKey) {
+                        console.log("WARNING: Output " + componentOutput + " on Component " + componentKey + " connects to a wire that doesn't exist! (" + circuit.components[componentKey].outputs[componentOutput] + ")");
+                    }
                 }
             }
         }

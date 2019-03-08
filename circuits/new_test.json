@@ -231,62 +231,17 @@
             }
         }
     },
-    "rats_nest":
-    {
-        "c1d4d10f-5172-42c3-adfc-841be0e9f480":
-        {
-            "value": 0,
-            "change_count": 0
-        },
-        "e48a759f-e637-4db4-a392-1fa7fdbb759c":
-        {
-            "value": 0,
-            "change_count": 0
-        },
-        "4f82e33c-c304-4292-ab3a-a7220787a7ae":
-        {
-            "value": 0,
-            "change_count": 0
-        },
-        "d7c5f109-df5a-4a69-91d2-49337b8ae732":
-        {
-            "value": 0,
-            "change_count": 0
-        },
-        "52a08afa-b481-40fa-8fa5-8de1a8d5811e":
-        {
-            "value": 0,
-            "change_count": 0
-        },
-        "a123fa0b-34a2-4fd4-b481-7b0d11fa9a6d":
-        {
-            "value": 0,
-            "change_count": 0
-        },
-        "0f155f44-8d69-48f9-a0fb-2ed2a9dd3605":
-        {
-            "value": 0,
-            "change_count": 0
-        },
-        "27bd6511-670d-4a98-b978-127b58e598a9":
-        {
-            "value": 0,
-            "change_count": 0
-        },
-        "5560433a-af2d-4d2c-88bd-8909cfe80a72":
-        {
-            "value": 0,
-            "change_count": 0
-        },
-        "fab75f47-3c59-4b31-9b82-31ca507afb6e":
-        {
-            "value": 0,
-            "change_count": 0
-        },
-        "fdab61fa-85fc-4fb0-b95c-7ff37b71b749":
-        {
-            "value": 0,
-            "change_count": 0
-        }
-    }
+    "rats_nest": [
+        "c1d4d10f-5172-42c3-adfc-841be0e9f480",
+        "e48a759f-e637-4db4-a392-1fa7fdbb759c",
+        "4f82e33c-c304-4292-ab3a-a7220787a7ae",
+        "d7c5f109-df5a-4a69-91d2-49337b8ae732",
+        "52a08afa-b481-40fa-8fa5-8de1a8d5811e",
+        "a123fa0b-34a2-4fd4-b481-7b0d11fa9a6d",
+        "0f155f44-8d69-48f9-a0fb-2ed2a9dd3605",
+        "27bd6511-670d-4a98-b978-127b58e598a9",
+        "5560433a-af2d-4d2c-88bd-8909cfe80a72",
+        "fab75f47-3c59-4b31-9b82-31ca507afb6e",
+        "fdab61fa-85fc-4fb0-b95c-7ff37b71b749"
+    ]
 }
