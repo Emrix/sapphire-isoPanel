@@ -1,0 +1,7 @@
+{
+    "name": "OR Gate Template",
+    "type": "gate",
+    "descriptor": "OR",
+    "inputs": ["A","B"],
+    "outputs": ["X"]
+}

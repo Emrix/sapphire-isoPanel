@@ -1,0 +1,292 @@
+{
+    "components":
+    {
+        "cb22c3f5-947a-423c-a14e-f83c49d6f732":
+        {
+            "name": "NOT Input",
+            "type": "driver",
+            "descriptor": "input",
+            "inputs":
+            {
+                "A": "1"
+            },
+            "outputs":
+            {
+                "X": "c1d4d10f-5172-42c3-adfc-841be0e9f480"
+            }
+        },
+
+
+        "cb22c3f5-947a-423c-a14e-f83c49d6f732":
+        {
+            "name": "NOT Input",
+            "type": "driver",
+            "descriptor": "input",
+            "inputs":
+            {
+                "A": "1"
+            },
+            "outputs":
+            {
+                "X": "c1d4d10f-5172-42c3-adfc-841be0e9f480"
+            }
+        },
+        "b6dc446e-b31f-42cb-a96d-5a87ad23a61b":
+        {
+            "name": "AND Input 1",
+            "type": "driver",
+            "descriptor": "input",
+            "inputs":
+            {
+                "A": "1"
+            },
+            "outputs":
+            {
+                "X": "e48a759f-e637-4db4-a392-1fa7fdbb759c"
+            }
+        },
+        "a9b84443-4e3e-4160-9828-908a848fb0d2":
+        {
+            "name": "AND Input 2",
+            "type": "driver",
+            "descriptor": "input",
+            "inputs":
+            {
+                "A": "1"
+            },
+            "outputs":
+            {
+                "X": "4f82e33c-c304-4292-ab3a-a7220787a7ae"
+            }
+        },
+        "a8eb6702-8a83-4dd7-8d12-35f7029ce8c3":
+        {
+            "name": "OR Input 1",
+            "type": "driver",
+            "descriptor": "input",
+            "inputs":
+            {
+                "A": "1"
+            },
+            "outputs":
+            {
+                "X": "d7c5f109-df5a-4a69-91d2-49337b8ae732"
+            }
+        },
+        "328bc79b-2fc1-4d97-b2a5-598defd4c414":
+        {
+            "name": "OR Input 2",
+            "type": "driver",
+            "descriptor": "input",
+            "inputs":
+            {
+                "A": "1"
+            },
+            "outputs":
+            {
+                "X": "52a08afa-b481-40fa-8fa5-8de1a8d5811e"
+            }
+        },
+        "9cfa6aca-c673-4e5d-829e-0813c6cec499":
+        {
+            "name": "XOR Input 1",
+            "type": "driver",
+            "descriptor": "input",
+            "inputs":
+            {
+                "A": "1"
+            },
+            "outputs":
+            {
+                "X": "a123fa0b-34a2-4fd4-b481-7b0d11fa9a6d"
+            }
+        },
+        "7aacce02-e14a-4cba-b17a-dd664d1e09bf":
+        {
+            "name": "XOR Input 2",
+            "type": "driver",
+            "descriptor": "input",
+            "inputs":
+            {
+                "A": "1"
+            },
+            "outputs":
+            {
+                "X": "0f155f44-8d69-48f9-a0fb-2ed2a9dd3605"
+            }
+        },
+        "92bbe5a8-1c17-4a5e-a155-4075fe1a7cab":
+        {
+            "name": "NOT Output",
+            "type": "emitter",
+            "descriptor": "outputs",
+            "inputs":
+            {
+                "A": "27bd6511-670d-4a98-b978-127b58e598a9"
+            },
+            "outputs":
+            {
+                "X": 1
+            }
+        },
+        "7fc83b7a-4e90-4e2f-aea9-9339d8209012":
+        {
+            "name": "AND Output",
+            "type": "emitter",
+            "descriptor": "outputs",
+            "inputs":
+            {
+                "A": "5560433a-af2d-4d2c-88bd-8909cfe80a72"
+            },
+            "outputs":
+            {
+                "X": 1
+            }
+        },
+        "846cbc2a-a350-4f3e-a974-2a4d3822517a":
+        {
+            "name": "OR Output",
+            "type": "emitter",
+            "descriptor": "outputs",
+            "inputs":
+            {
+                "A": "fab75f47-3c59-4b31-9b82-31ca507afb6e"
+            },
+            "outputs":
+            {
+                "X": 1
+            }
+        },
+        "75389a08-b56a-4d76-a7a3-f32f730fd826":
+        {
+            "name": "XOR Output",
+            "type": "emitter",
+            "descriptor": "outputs",
+            "inputs":
+            {
+                "A": "fdab61fa-85fc-4fb0-b95c-7ff37b71b749"
+            },
+            "outputs":
+            {
+                "X": 1
+            }
+        },
+        "9e9492ff-5567-4773-9aa2-39986f506173":
+        {
+            "name": "NOT",
+            "type": "gate",
+            "descriptor": "NOT",
+            "inputs":
+            {
+                "A": "c1d4d10f-5172-42c3-adfc-841be0e9f480"
+            },
+            "outputs":
+            {
+                "X": "27bd6511-670d-4a98-b978-127b58e598a9"
+            }
+        },
+        "c4a2ade6-4371-4edd-987f-b73b88e70800":
+        {
+            "name": "AND",
+            "type": "gate",
+            "descriptor": "AND",
+            "inputs":
+            {
+                "A": "e48a759f-e637-4db4-a392-1fa7fdbb759c",
+                "B": "4f82e33c-c304-4292-ab3a-a7220787a7ae"
+            },
+            "outputs":
+            {
+                "X": "5560433a-af2d-4d2c-88bd-8909cfe80a72"
+            }
+        },
+        "81638403-805d-4975-8283-161ea81998b1":
+        {
+            "name": "OR",
+            "type": "gate",
+            "descriptor": "OR",
+            "inputs":
+            {
+                "A": "d7c5f109-df5a-4a69-91d2-49337b8ae732",
+                "B": "52a08afa-b481-40fa-8fa5-8de1a8d5811e"
+            },
+            "outputs":
+            {
+                "X": "fab75f47-3c59-4b31-9b82-31ca507afb6e"
+            }
+        },
+        "8a18d2fe-ed71-473d-baf5-8b99aef8647a":
+        {
+            "name": "XOR",
+            "type": "gate",
+            "descriptor": "XOR",
+            "inputs":
+            {
+                "A": "a123fa0b-34a2-4fd4-b481-7b0d11fa9a6d",
+                "B": "0f155f44-8d69-48f9-a0fb-2ed2a9dd3605"
+            },
+            "outputs":
+            {
+                "X": "fdab61fa-85fc-4fb0-b95c-7ff37b71b749"
+            }
+        }
+    },
+    "rats_nest":
+    {
+        "c1d4d10f-5172-42c3-adfc-841be0e9f480":
+        {
+            "value": 0,
+            "change_count": 0
+        },
+        "e48a759f-e637-4db4-a392-1fa7fdbb759c":
+        {
+            "value": 0,
+            "change_count": 0
+        },
+        "4f82e33c-c304-4292-ab3a-a7220787a7ae":
+        {
+            "value": 0,
+            "change_count": 0
+        },
+        "d7c5f109-df5a-4a69-91d2-49337b8ae732":
+        {
+            "value": 0,
+            "change_count": 0
+        },
+        "52a08afa-b481-40fa-8fa5-8de1a8d5811e":
+        {
+            "value": 0,
+            "change_count": 0
+        },
+        "a123fa0b-34a2-4fd4-b481-7b0d11fa9a6d":
+        {
+            "value": 0,
+            "change_count": 0
+        },
+        "0f155f44-8d69-48f9-a0fb-2ed2a9dd3605":
+        {
+            "value": 0,
+            "change_count": 0
+        },
+        "27bd6511-670d-4a98-b978-127b58e598a9":
+        {
+            "value": 0,
+            "change_count": 0
+        },
+        "5560433a-af2d-4d2c-88bd-8909cfe80a72":
+        {
+            "value": 0,
+            "change_count": 0
+        },
+        "fab75f47-3c59-4b31-9b82-31ca507afb6e":
+        {
+            "value": 0,
+            "change_count": 0
+        },
+        "fdab61fa-85fc-4fb0-b95c-7ff37b71b749":
+        {
+            "value": 0,
+            "change_count": 0
+        }
+    }
+}
