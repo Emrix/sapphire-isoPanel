@@ -1,0 +1,17 @@
+{
+  "name": "sapphire-isoPanel",
+  "version": "1.0.0",
+  "description": "Sapphire ISO Panel, created by Matt Ricks",
+  "main": "webserver.js",
+  "scripts": {
+    "start": "node app.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "fs": "0.0.1-security",
+    "onoff": "^3.1.0",
+    "uuid": "^3.3.2"
+  }
+}
