@@ -46,7 +46,8 @@
 
 1.
 I want to make a hardware panel, controlled by a raspberry pi, which can accept any amount of binary inputs, 
-as well as any amount of binary outputs, And have it configurable so that it can be used in different ways for different situations
+as well as any amount of binary outputs, And have it configurable so that it can be used in different ways for 
+different situations
 
 2.
 It will use a raspberry pi as a headless machine
@@ -65,7 +66,7 @@ As a Flight Director, I would like to be able to override the outputs and inputs
 As a Flight Director, I would like to be able to control the LCD messages on the panel
 As a Flight Director, I want the panel to be integrated in with the controls
 As a Flight Director, I want to be able to make the panel physically move in some way
-As a Flight Director, I want to be able to make the panel behave differently based on what configuration I tell it to be in.
+As a Flight Director, I want the panel behave differently based on what configuration I tell it to be in.
 As a Flight Director, I would like to be able to have my UI on a separate interface than the controls
 As a Flight Director, I want to be able to create my own panel logic configurations
 As a Flight Director, I want to be able to create my own physical panels
