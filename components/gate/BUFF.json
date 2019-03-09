@@ -1,0 +1,7 @@
+{
+    "name": "BUFF Gate Template",
+    "type": "gate",
+    "descriptor": "BUFF",
+    "inputs": ["A"],
+    "outputs": ["X"]
+}

@@ -1,0 +1,7 @@
+{
+    "name": "TAN Gate Template",
+    "type": "gate",
+    "descriptor": "TAN",
+    "inputs": ["A"],
+    "outputs": ["X"]
+}

@@ -1,0 +1,7 @@
+{
+    "name": "ROUND Gate Template",
+    "type": "gate",
+    "descriptor": "ROUND",
+    "inputs": ["A"],
+    "outputs": ["X"]
+}

@@ -1,0 +1,7 @@
+{
+    "name": "LOG Gate Template",
+    "type": "gate",
+    "descriptor": "LOG",
+    "inputs": ["A"],
+    "outputs": ["X"]
+}

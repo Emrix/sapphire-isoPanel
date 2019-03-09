@@ -1,0 +1,7 @@
+{
+    "name": "NOR Gate Template",
+    "type": "gate",
+    "descriptor": "NOR",
+    "inputs": ["A","B"],
+    "outputs": ["X"]
+}

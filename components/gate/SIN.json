@@ -1,0 +1,7 @@
+{
+    "name": "SIN Gate Template",
+    "type": "gate",
+    "descriptor": "SIN",
+    "inputs": ["A"],
+    "outputs": ["X"]
+}

@@ -1,0 +1,7 @@
+{
+    "name": "SUB Gate Template",
+    "type": "gate",
+    "descriptor": "SUB",
+    "inputs": ["M","S"],
+    "outputs": ["X"]
+}

@@ -1,0 +1,7 @@
+{
+    "name": "MULT Gate Template",
+    "type": "gate",
+    "descriptor": "MULT",
+    "inputs": ["A","B"],
+    "outputs": ["X"]
+}

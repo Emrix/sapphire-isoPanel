@@ -1,0 +1,7 @@
+{
+    "name": "COS Gate Template",
+    "type": "gate",
+    "descriptor": "COS",
+    "inputs": ["A"],
+    "outputs": ["X"]
+}

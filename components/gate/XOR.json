@@ -1,0 +1,7 @@
+{
+    "name": "XOR Gate Template",
+    "type": "gate",
+    "descriptor": "XOR",
+    "inputs": ["A","B"],
+    "outputs": ["X"]
+}

@@ -1,0 +1,7 @@
+{
+    "name": "MOD Gate Template",
+    "type": "gate",
+    "descriptor": "MOD",
+    "inputs": ["A","N"],
+    "outputs": ["X"]
+}
