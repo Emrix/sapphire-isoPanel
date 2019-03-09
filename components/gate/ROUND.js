@@ -4,18 +4,11 @@ function evaluate(inputs) {
     if (debugMode) { console.log("Inputs\n" + JSON.stringify(inputs)); }
     let evaluatedOutputs = { "X": 0 };
 
-    var result = 1;
-    for (let element in inputs) {
-        if (inputs[element] >= 0 && inputs[element] < .5) {
-            result = 0;
-            break;
-        }
-        if (inputs[element] === -1 && result != 0) {
-            result = -1;
-            break;
-        }
-    };
-    evaluatedOutputs["X"] = result;
+    if (inputs["A"] === -1) {
+        evaluatedOutputs["X"] = -1;
+    } else {
+        evaluatedOutputs["X"] = Math.round(inputs["A"]);
+    }
 
     if (debugMode) { console.log("Evaluated Outputs\n" + JSON.stringify(evaluatedOutputs)); }
     return evaluatedOutputs;

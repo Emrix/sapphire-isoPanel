@@ -1,10 +1,43 @@
-var configFile = "default.json";
+let configFile = "new_test";
+let inputs = [-1, 1, 1, 0, -1, 0, 0];
 
 
 //Start Libraries
-var fs = require('fs'); //require filesystem module
-var uuidv4 = require('uuid/v4');
+let fs = require('fs');
 //End Libraries
+let logic_simulator = require("./logic_simulator.js");
+
+
+fs.readFile((__dirname + '/circuits/' + configFile + ".json"), { encoding: 'utf-8' }, function(err, circuit) {
+    circuit = JSON.parse(circuit);
+    let outputs = logic_simulator.run(circuit, inputs);
+    console.log(outputs);
+});
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/*
+
+
 
 
 
@@ -42,7 +75,7 @@ const configuring = {
                 throw "unable to configure";
             } else {
                 //Registers itself and current configuration on the thorium Server
-                /* I'd need to set the client veriable again, and I'm not sure if that'll work or not. */
+                // I'd need to set the client veriable again, and I'm not sure if that'll work or not. 
                 //initializes the circuit into the logical analyzer
                 circuit = JSON.parse(data).circuit;
                 //Get the Panel Inputs & outputs from the Circuit, and store them in a key-value map UUID as key
@@ -59,7 +92,7 @@ const configuring = {
                     }
                 }
 
-                /* I don't need to do this right now until Thorium is actually integrated */
+                // I don't need to do this right now until Thorium is actually integrated 
                 //Get the thorium queries and store them in keyvalue map with the UUID as key
                 //Get the thorium mutations and store them in keyvalue map with the UUID as key
             }
@@ -192,15 +225,15 @@ const process = {
             if (circuit[x].component === "driver") {
                 switch (true) {
                     //case (WEBinputs[x] != undefined):
-                        //circuit[x].level = WEBinputs[x];
-                        //break;
+                    //circuit[x].level = WEBinputs[x];
+                    //break;
                     case (!FSM.inputs.thoriumIsAvailable):
                         circuit[x].level = SPIfloatInputs[x];
                         break;
-                    //case (THORIUMinputs[x] == circuit[x].level):
+                        //case (THORIUMinputs[x] == circuit[x].level):
                         //circuit[x].level = SPIfloatInputs[x];
                         //break;
-                    //case (THORIUMinputs[x] != circuit[x].level):
+                        //case (THORIUMinputs[x] != circuit[x].level):
                         //circuit[x].level = THORIUMinputs[x];
                         //break;
                     default:
@@ -396,11 +429,11 @@ const process = {
             //Check the stability of the component
             if (stabilityMap[uuid] > 10) {
                 if (debugMode) { console.log("Invalid Logic Found.  Halting Circuit Simulation. Component ID" + uuid); }
-                /*
-                Theoretically, it's possible to get an infinite loop with a -1,
-                So to prevent that, this is a hard stop, where the circuit will
-                just stop evaluating, and probably throw an error.
-                */
+                
+                //Theoretically, it's possible to get an infinite loop with a -1,
+                //So to prevent that, this is a hard stop, where the circuit will
+                //just stop evaluating, and probably throw an error.
+                
                 throw ("Invalid Logic Found.  Halting Circuit Simulation. Component ID" + uuid);
 
             } else if (stabilityMap[uuid] === 7) { //Component is deemed as unstable, it cannot settle on a specific level
@@ -776,8 +809,8 @@ const spiOUT = {
                 SPIbitOutputs[dataStartbit + y] = temp[y];
             }
         }
-        //		console.log(SPIfloatOutputs);
-        //		console.log(SPIbitOutputs);
+        //      console.log(SPIfloatOutputs);
+        //      console.log(SPIbitOutputs);
 
 
 
@@ -832,3 +865,5 @@ function proceedToNextState() {
 if (debugMode) console.log("starting state machine")
 proceedToNextState();
 //End Initialize and run State Machine
+
+*/

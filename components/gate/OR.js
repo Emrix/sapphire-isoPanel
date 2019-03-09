@@ -8,11 +8,11 @@ function evaluate(inputs) {
     for (let element in inputs) {
         if (inputs[element] >= .5) {
             result = 1;
-            return;
+            break;
         }
         if (inputs[element] === -1 && result != 1) {
             result = -1;
-            return;
+            break;
         }
     };
     evaluatedOutputs["X"] = result;

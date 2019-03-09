@@ -5,17 +5,20 @@ function evaluate(inputs) {
     let evaluatedOutputs = { "X": 0 };
 
     var result = 1;
+    var hasAnX = false;
     for (let element in inputs) {
-        if (inputs[element] >= 0 && inputs[element] < .5) {
-            result = 0;
-            break;
+        if (inputs[element] === -1) {
+            hasAnX = true;
         }
-        if (inputs[element] === -1 && result != 0) {
-            result = -1;
-            break;
+        if (inputs[element] > .5) {
+            result++;
         }
     };
-    evaluatedOutputs["X"] = result;
+    if (hasAnX) {
+        evaluatedOutputs["X"] = -1;
+    } else {
+        evaluatedOutputs["X"] = result % 2;
+    }
 
     if (debugMode) { console.log("Evaluated Outputs\n" + JSON.stringify(evaluatedOutputs)); }
     return evaluatedOutputs;
@@ -31,7 +34,7 @@ module.exports = {
     set debugMode(tf) {
         if (tf) {
             debugMode = true;
-            console.log("and gate Debug Mode Activated!");
+            console.log("xor gate Debug Mode Activated!");
         } else {
             debugMode = false;
         }

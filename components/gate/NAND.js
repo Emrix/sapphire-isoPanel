@@ -15,7 +15,11 @@ function evaluate(inputs) {
             break;
         }
     };
-    evaluatedOutputs["X"] = result;
+    if (result != -1) {
+        evaluatedOutputs["X"] = (result ? 0 : 1);
+    } else {
+        evaluatedOutputs["X"] = result;
+    }
 
     if (debugMode) { console.log("Evaluated Outputs\n" + JSON.stringify(evaluatedOutputs)); }
     return evaluatedOutputs;

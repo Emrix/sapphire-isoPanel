@@ -1,0 +1,7 @@
+{
+    "name": "NAND Gate Template",
+    "type": "gate",
+    "descriptor": "NAND",
+    "inputs": ["A","B"],
+    "outputs": ["X"]
+}

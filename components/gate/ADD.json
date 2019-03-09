@@ -1,0 +1,7 @@
+{
+    "name": "ADD Gate Template",
+    "type": "gate",
+    "descriptor": "ADD",
+    "inputs": ["A","B"],
+    "outputs": ["X"]
+}

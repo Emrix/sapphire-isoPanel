@@ -1,0 +1,7 @@
+{
+    "name": "XNOR Gate Template",
+    "type": "gate",
+    "descriptor": "XNOR",
+    "inputs": ["A","B"],
+    "outputs": ["X"]
+}

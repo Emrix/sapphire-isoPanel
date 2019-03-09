@@ -140,7 +140,7 @@ fs.readFile((__dirname + '/circuits/' + configFile + ".json"), { encoding: 'utf-
         //Check to see if there are any inputs / outputs that are not connected to a wire
         for (let componentKey in circuit.components) {
             for (let componentInput in circuit.components[componentKey].inputs) {
-                if (circuit.components[componentKey].inputs[componentInput] == "") {
+                if (circuit.components[componentKey].inputs[componentInput] == "" && circuit.components[componentKey].type != "driver") {
                     console.log("WARNING: Input " + componentInput + " on Component " + componentKey + " has no wire connections.");
                 }
                 if (circuit.components[componentKey].type != "driver") {
@@ -156,7 +156,7 @@ fs.readFile((__dirname + '/circuits/' + configFile + ".json"), { encoding: 'utf-
                 }
             }
             for (let componentOutput in circuit.components[componentKey].outputs) {
-                if (circuit.components[componentKey].outputs[componentOutput] == "") {
+                if (circuit.components[componentKey].outputs[componentOutput] == "" && circuit.components[componentKey].type != "emitter") {
                     console.log("WARNING: Output " + componentOutput + " on Component " + componentKey + " has no wire connections.");
                 }
                 if (circuit.components[componentKey].type != "emitter") {
@@ -168,6 +168,33 @@ fs.readFile((__dirname + '/circuits/' + configFile + ".json"), { encoding: 'utf-
                     }
                     if (!matchesWireKey) {
                         console.log("WARNING: Output " + componentOutput + " on Component " + componentKey + " connects to a wire that doesn't exist! (" + circuit.components[componentKey].outputs[componentOutput] + ")");
+                    }
+                }
+            }
+        }
+
+        //Check to see if drivers pull from the same input
+        let driver_input_placement = [];
+        for (let componentKey in circuit.components) {
+            if (circuit.components[componentKey].type == "driver") {
+                for (let componentInput in circuit.components[componentKey].inputs) {
+                    if (driver_input_placement[circuit.components[componentKey].inputs[componentInput]] != "X") {
+                        driver_input_placement[circuit.components[componentKey].inputs[componentInput]] = "X";
+                    } else {
+                        console.log("WARNING: Driver Input " + componentInput + " on Component " + componentKey + " overlaps with another driver");
+                    }
+                }
+            }
+        }
+        //Check to see if emitters push to the same output
+        let emitter_output_placement = [];
+        for (let componentKey in circuit.components) {
+            if (circuit.components[componentKey].type == "emitter") {
+                for (let componentOutput in circuit.components[componentKey].outputs) {
+                    if (emitter_output_placement[circuit.components[componentKey].outputs[componentOutput]] != "X") {
+                        emitter_output_placement[circuit.components[componentKey].outputs[componentOutput]] = "X";
+                    } else {
+                        console.log("WARNING: Emitter Output " + componentOutput + " on Component " + componentKey + " overlaps with another Emitter");
                     }
                 }
             }

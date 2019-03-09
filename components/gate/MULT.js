@@ -6,15 +6,11 @@ function evaluate(inputs) {
 
     var result = 1;
     for (let element in inputs) {
-        if (inputs[element] >= 0 && inputs[element] < .5) {
-            result = 0;
-            break;
+        if (inputs[element] != -1) {
+            result *= inputs[element];
         }
-        if (inputs[element] === -1 && result != 0) {
-            result = -1;
-            break;
-        }
-    };
+        break;
+    }
     evaluatedOutputs["X"] = result;
 
     if (debugMode) { console.log("Evaluated Outputs\n" + JSON.stringify(evaluatedOutputs)); }

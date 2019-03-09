@@ -7,7 +7,7 @@ function evaluate(inputs) {
     if (inputs["A"] === -1) {
         evaluatedOutputs["X"] = -1;
     } else {
-        evaluatedOutputs["X"] = Math.round(inputs[0]) > .5 ? 0 : 1;
+        evaluatedOutputs["X"] = Math.round(inputs["A"]) > .5 ? 0 : 1;
     }
 
     if (debugMode) { console.log("Evaluated Outputs\n" + JSON.stringify(evaluatedOutputs)); }
