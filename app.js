@@ -1,19 +1,11 @@
 let configFile = "new_test";
-let inputs = [-1, 1, 1, 0, -1, 0, 0];
+let inputs = [];
 
 
 //Start Libraries
 let fs = require('fs');
 //End Libraries
 let logic_simulator = require("./logic_simulator.js");
-
-
-fs.readFile((__dirname + '/circuits/' + configFile + ".json"), { encoding: 'utf-8' }, function(err, circuit) {
-    circuit = JSON.parse(circuit);
-    let outputs = logic_simulator.run(circuit, inputs);
-    console.log(outputs);
-});
-
 var spi = require('./SPI_Controller.js');
 
 spi.debugMode = true;
@@ -26,8 +18,15 @@ spi.setup({
     "max_io": 16
 });
 
-spi.write(spi.read());
-spi.halt();
+fs.readFile((__dirname + '/circuits/' + configFile + ".json"), { encoding: 'utf-8' }, function(err, circuit) {
+    circuit = JSON.parse(circuit);
+    inputs = spi.read();
+    logic_simulator.debugMode = true;
+    let outputs = logic_simulator.run(circuit, inputs);
+    spi.write(outputs);
+    spi.halt();
+});
+
 
 
 
