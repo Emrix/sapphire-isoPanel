@@ -1,0 +1,415 @@
+1. Envision Success
+2. Break it down
+3. Simplify it
+4. Put it back together
+5. Repeat
+
+1. What do you want to make?
+	Write a description of it.
+2. What technology will you use?
+	Consider which technologies you're familiar with or able to learn easily.
+	Consider which of them are the most well suited for the job.
+3. What features will it include?
+	Make mock-ups
+		User Stories
+		Story boards
+	List what features it will include
+	Group Features in a logical manner
+4. But what features must it include?
+	Prioritize Each feature / group of features asking: Is this a feature...
+		needed for the minimum viable product to get this project running?
+		which I am excited about building?
+		which is unique to my program?
+		where I will learn the most from implementing?
+		too far beyond my current skill level?
+	Group those prioritized features into Project Versions or Milestones
+5. How will you implement it?
+	While analyzing the features, list out:
+		Input
+			User Interaction
+			Exposed Endpoints
+			Stored Data
+		Structure
+			Data
+			Filesystem
+		Actions
+			Algorithms
+			Data checking
+		Results
+			User Feedback
+			Exposed Endpoints
+	Start to Sudo Code each part
+6. What's your timeline?
+	Determine about how long it may take to program each part of code
+	Determine your schedule for coding those objects
+	Find ways to save time, by programming efficiently
+
+1.
+I want to make a hardware panel, controlled by a raspberry pi, which can accept any amount of binary inputs, 
+as well as any amount of binary outputs, And have it configurable so that it can be used in different ways for 
+different situations
+
+2.
+It will use a raspberry pi as a headless machine
+GPIO on the pi (with SPI)
+I'll use Node.js for now as a method of rapid prototyping.  I'd like to move to C++ later.
+
+3.
+As a crew member, I would like to be able to switch switches on the panel
+As a crew member, I would like to be able to see LEDs and LCDs
+As a crew member, I would want to make it feel like the panel actually does something
+As a crew member, I would like to see the panel react to things happening in the mission
+As a Flight Director, I would like to be able to see what switches are switched
+As a Flight Director, I would like to be able to make the panel make sounds
+As a Flight Director, I would like to be able to control the lights on the panel
+As a Flight Director, I would like to be able to override the outputs and inputs on the panel
+As a Flight Director, I would like to be able to control the LCD messages on the panel
+As a Flight Director, I want the panel to be integrated in with the controls
+As a Flight Director, I want to be able to make the panel physically move in some way
+As a Flight Director, I want the panel behave differently based on what configuration I tell it to be in.
+As a Flight Director, I would like to be able to have my UI on a separate interface than the controls
+As a Flight Director, I want to be able to create my own panel logic configurations
+As a Flight Director, I want to be able to create my own physical panels
+As a Flight Director, I want to be able to see a history of what Inputs / Outputs happened
+As a maintainer, I want to be able to install the panels easily
+As a maintainer, I want to be able to access the back of the panels easily
+As a maintainer, I want to be able to switch out parts easily
+
+Feature List
+
+UI
+- UI shows current State of panel
+- UI shows layout of panel
+- UI provides a way to design a panel
+- UI provides a way to design the logic of the panel
+- Web server to serve up the UI
+- LCDs can have custom messages
+- UI has Virtual Inputs
+- Log
+- Websocket Updates
+
+Pysical
+- Physical Switches and buttons
+- Physical Lights
+- I/O can connect to Digital highs and lows
+- Speaker is connected to the Pi for making sounds
+
+Thorium Linking
+- Panel connects to Thorium as a Client
+- Thorium can assign logic setups to specific panels (provided by the panels?)
+- Auto Discovery of Thorium through Bonjour
+
+Logic
+- Panel can switch between logic setups on the fly
+- Logic setups take in inputs, process them, and then output stuff
+- There are logic gates to do logic
+- There are math gates to do math
+- Web or Virtual I/O can be factored in
+- LCDs have preset messages
+- Thorium I/O can be factored in
+
+
+4.
+UI - (P2)
+- UI shows current State of panel - (P1)
+- UI shows layout of panel - (P2)
+- UI provides a way to design a panel - (P3)
+- UI provides a way to design the logic of the panel - (P3)
+- Web server to serve up the UI - (P1)
+- LCDs can have custom messages - (P3)
+- UI has Virtual Inputs - (P1)
+- Log - (P2)
+- Websocket Updates (P1)
+
+Pysical - (P1)
+- Physical Switches and buttons - (P1)
+- Physical Lights - (P1)
+- I/O can connect to Digital highs and lows - (P1)
+- Speaker is connected to the Pi for making sounds - (P3)
+
+Thorium Linking - (P3)
+- Panel connects to Thorium as a Client - (P2)
+- Thorium can assign logic setups to specific panels (provided by the panels?) - (P3)
+- Auto Discovery of Thorium through Bonjour - (P2)
+
+Logic - (P1)
+- Panel can switch between logic setups on the fly - (P3)
+- Logic setups take in inputs, process them, and then output stuff - (P1)
+- There are logic gates to do logic - (P1)
+- There are math gates to do math - (P1)
+- Web or Virtual I/O can be factored in - (P2)
+- LCDs have preset messages - (P1)
+- Thorium I/O can be factored in - (P2)
+
+
+
+Version 1
+Pysical - Physical Switches and buttons - (P1-1)
+Pysical - Physical Lights - (P1-1)
+Pysical - I/O can connect to Digital highs and lows - (P1-1)
+Logic - Logic setups take in inputs, process them, and then output stuff - (P1-1)
+Logic - There are logic gates to do logic - (P1-1)
+Logic - There are math gates to do math - (P1-1)
+Logic - LCDs have preset messages - (P1-1)
+UI - UI shows current State of panel - (P1-2)
+UI - Web server to serve up the UI - (P1-2)
+UI - UI has Virtual Inputs - (P1-2)
+
+Version 2
+UI - Websocket Updates (P2-1)
+Logic - Web or Virtual I/O can be factored in - (P2-1)
+Logic - Thorium I/O can be factored in - (P2-1)
+UI - UI shows layout of panel - (P2-2)
+Thorium Linking - Panel connects to Thorium as a Client - (P2-2)
+UI - Log - (P2-2)
+Thorium Linking - Auto Discovery of Thorium through Bonjour - (P2-3)
+
+Version 3
+Pysical - Speaker is connected to the Pi for making sounds - (P3-1)
+Logic - Panel can switch between logic setups on the fly - (P3-1)
+UI - UI provides a way to design a panel - (P3-2)
+UI - UI provides a way to design the logic of the panel - (P3-2)
+UI - LCDs can have custom messages - (P3-2)
+Thorium Linking - Thorium can assign logic setups to specific panels (provided by the panels?) - (P3-2)
+
+
+5.
+(For version 1)
+Input
+	User Interaction
+		Dials, Switches, and Buttons
+		Web UI
+		Start up and Shutdown button
+	Exposed Endpoints
+		"API" or web endpoint
+	Stored Data
+		Stored Config Files
+Structure
+	Data
+		circuit object
+			Component Object (Input/Output/Gate)
+		Array for SPI IO
+		State Objects
+	Filesystem
+		Web Pages
+		Main Entry Point (app.js)
+		Web Server
+		Object Types (Components / State / etc).
+Process
+	Algorithms
+		start up process (each object has it's own)
+		Web Server Logic
+		Receiving IO
+		Sending IO
+		Saving I/O data to File
+		Bit to Float
+		Float to Bit
+		Databit Length for spi I/O
+		Logic Simulation
+		Component Calculations
+		shutdown process (each object has it's own)
+
+Results
+	User Feedback
+		LEDs
+		LCDs
+		UI Changes (Refresh after a bit)
+	Exposed Endpoints
+		"API"
+
+
+
+
+//The web server could run on a completely different program / process........
+//But probably not later on when websockets are enabled
+
+
+
+./app.js
+/*
+initialize all libraries needed
+Import web server
+import all states
+based on the config, import all components
+*/
+
+./public/index.html
+/*
+basic format of an index page
+server creates and sends the updated config file
+*/
+./public/index.css
+/*
+basic format for the CSS file (very simple)
+*/
+./public/index.js
+/*
+it retrieves the state file every so often
+it sends the web_input when needed
+*/
+./public/state.json
+/*
+Basically the current state of the circuit
+*/
+./public/web_inputs.json
+/*
+contains a json with the UUIDs of the virutal inputs, and supposed values
+*/
+
+./server.js
+/*
+require HTTP
+serve up and down files all day
+Create 404 page
+create api of some sort for components and setting values and such
+*/
+
+./components/*
+/gates/
+	Nand
+	Nor
+	Or
+	NOT
+	And
+	Xor
+	Xnor
+	Buff
+	Mult
+	Add
+	Sub
+	Div
+	Mod
+	Log
+	Exp (pow)
+	Cos
+	Sin
+	Tan
+	Csc
+	Sec
+	Cot
+	round
+	floor
+	ceil
+
+/Output/
+	LED
+	Dimmable LED
+	Voltmeter
+	Speaker
+	Servo
+	RGBLED
+	DimmableRGBLED
+	LCD
+	7Seg
+	LEDBar
+	SmartCable
+	Buzzer
+	FiberLight
+	Motor
+	Electro-MagLock
+	console.log
+	virtual web
+	dac
+/Input/
+	button
+	dumbCable
+	fiberCable
+	smartCable
+	2wayswitch
+	3 way switch
+	n way switch
+	rotary encoder
+	adc
+	chip
+	rod
+	rotary switch
+
+Each one will have
+{
+	ID: UUID,
+	Inputs: [
+		input1:
+		input2:
+		...
+		inputn:
+	],
+	outputs: [
+		output1:
+		output2:
+		...
+		outputn:
+	],
+	logic: function() {
+		take inputs
+	}
+	current value: float,
+	memory: {
+		mem1:
+		mem2:
+		...
+		memn:
+	}
+}
+
+./states/*
+/*
+SPI Out
+SPI In
+Logic Simulation (process)
+Startup (initialize)
+Shutdown
+Config Change (configuration)
+Web In
+Web Out
+*/
+
+./configs/*
+default.json
+example1.json
+example2.json
+
+./common/*
+/*
+Receiving IO
+Sending IO
+Saving I/O data to File
+Bit to Float
+Float to Bit
+Databit Length for spi I/O
+Component Calculations / simulations
+*/
+
+
+
+6.
+Timeline
+One major file every 2 days, over about 32 days
+
+Major files:
+√	./common/sending and receiving io
+√	./common/bit to float, float to bit, databit length
+	./components/gates
+	./components/input
+	./components/output
+	./states/web in and out
+	./states/SPI in and out
+	./states/startup and shutdown
+	./states/config change
+	./states/logic sim
+	./app.js
+	./configs/*
+
+	./common/comp calculations, saving io to file
+	./server.js
+	./public/html css js
+	./public/state and virtual inputs
+
+I can copy a lot of this code from what I already have programmed.
+This is mostly just organizing it in a better manner
+to have a better development process.
+
+
+
+The objective with version one is to actually get the panel into
+the simulators, built and functioning, at least mostly,
+and then to add addtional functionality later.
