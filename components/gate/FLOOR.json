@@ -1,0 +1,7 @@
+{
+    "name": "FLOOR Gate Template",
+    "type": "gate",
+    "descriptor": "FLOOR",
+    "inputs": ["A"],
+    "outputs": ["X"]
+}

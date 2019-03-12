@@ -1,0 +1,7 @@
+{
+    "name": "NOT Gate Template",
+    "type": "gate",
+    "descriptor": "NOT",
+    "inputs": ["A"],
+    "outputs": ["X"]
+}

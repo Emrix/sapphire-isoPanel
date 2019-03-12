@@ -1,0 +1,7 @@
+{
+    "name": "Output Emitter Template",
+    "type": "emitter",
+    "descriptor": "output",
+    "inputs": ["A"],
+    "outputs": ["X"]
+}

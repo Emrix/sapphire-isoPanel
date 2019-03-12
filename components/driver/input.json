@@ -1,0 +1,7 @@
+{
+    "name": "Input Driver Template",
+    "type": "driver",
+    "descriptor": "input",
+    "inputs": ["A"],
+    "outputs": ["X"]
+}

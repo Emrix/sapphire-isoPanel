@@ -1,0 +1,7 @@
+{
+    "name": "CEIL Gate Template",
+    "type": "gate",
+    "descriptor": "CEIL",
+    "inputs": ["A"],
+    "outputs": ["X"]
+}

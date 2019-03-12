@@ -1,0 +1,7 @@
+{
+    "name": "DIV Gate Template",
+    "type": "gate",
+    "descriptor": "DIV",
+    "inputs": ["N","D"],
+    "outputs": ["X"]
+}
