@@ -1,0 +1,27 @@
+Ok, so I have the config for the logic circuit (logic for whole thing)
+and now I need the interface between the SPI, the LCD, and the WEB
+
+Process:
+
+Read in values from SPI
+using some sort of config, place those values in an array
+This array is concurrent, and always is available
+Values from Web are asynchronously added to the array
+
+array is processed in the circuit
+
+using the config, outputs to the web, spi, and lcd are declared
+
+
+
+
+
+Config file will determine:
+	Logic Circuit to use
+	Web Interface to use
+	Number of LCDs
+	Mappings from SPI-in and WEB-in to Circuit-in
+	Mappings from Circuit-out to SPI-out, WEB-out, and LCD-out
+
+
+Or should I just do some sort of hard coded thing for right now?

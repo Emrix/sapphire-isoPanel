@@ -1,0 +1,24 @@
+{
+    "circuit": "new_test.json",
+    "virtualIO": [
+    {
+        "name": "input1",
+        "IO": "input",
+        "type": "bool"
+    },
+    {
+        "name": "input2",
+        "IO": "input",
+        "type": "string"
+    },
+    {
+        "name": "output1",
+        "IO": "output",
+        "type": "string"
+    }
+    {
+        "name": "output2",
+        "IO": "output",
+        "type": "bool"
+    }]
+}
