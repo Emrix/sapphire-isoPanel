@@ -11,6 +11,7 @@ function run(circuit, dataIn) {
     let dataOut = [];
 
     //Compile the logic circuit
+    total_cycles = 0;
     for (key in circuit.rats_nest) {
         simulation.rats_nest[circuit.rats_nest[key]] = { "value": 0, "change_count": 0 };
     }

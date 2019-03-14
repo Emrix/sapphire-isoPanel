@@ -1,12 +1,13 @@
 let configFile = "new_test";
-let inputs = [];
-
 
 //Start Libraries
 let fs = require('fs');
-//End Libraries
+//Local Libararies
 let logic_simulator = require("./logic_simulator.js");
 var spi = require('./SPI_Controller.js');
+var http = require('./http_server.js');
+//End Libraries
+
 
 spi.debugMode = true;
 spi.setup({
@@ -18,17 +19,7 @@ spi.setup({
     "max_io": 16
 });
 
-fs.readFile((__dirname + '/circuits/' + configFile + ".json"), { encoding: 'utf-8' }, function(err, circuit) {
-    circuit = JSON.parse(circuit);
-    inputs = spi.read();
-    logic_simulator.debugMode = true;
-    let outputs = logic_simulator.run(circuit, inputs);
-    spi.write(outputs);
-    spi.halt();
-});
-
-
-
+http.start();
 
 var lcd = require('./LCD_SPI_Controller.js');
 
@@ -64,12 +55,32 @@ lcd.set({ "line": 1, "lcd": 3, "message": "Power Node 2:   " });
 lcd.set({ "line": 2, "lcd": 3, "message": "4400 Units/Power" });
 lcd.commit();
 
-lcd.halt();
+
+fs.readFile((__dirname + '/circuits/' + configFile + ".json"), { encoding: 'utf-8' }, function(err, circuit) {
+    circuit = JSON.parse(circuit);
+    logic_simulator.debugMode = true;
+
+    function process() {
+        http.updateCiruit(circuit);
+
+        let inputs = spi.read();
+        http.updateInputValues(inputs);
+
+        let outputs = logic_simulator.run(circuit, inputs);
+        spi.write(outputs);
+        http.updateOutputValues(outputs);
+        setTimeout(process, 500);
+    }
+    setTimeout(process, 500);
+});
+
 
 
 //Start Listening for Control - C
 if (false) {
     process.on('let', function() {
+        spi.halt();
+        lcd.halt();
         unexportOnClose();
         process.exit(); //exit completely
     }); //function to run when user closes using ctrl+c
