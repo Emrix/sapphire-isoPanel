@@ -1,0 +1,15 @@
+#inputpane {
+    float: left;
+}
+
+#outputpane {
+    float: right;
+}
+
+.on {
+    background-color: #70FF70;
+}
+
+.off {
+    background-color: #FF7070;
+}

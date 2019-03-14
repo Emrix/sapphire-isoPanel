@@ -153,7 +153,6 @@ Logic - There are math gates to do math - (P1-1)
 Logic - LCDs have preset messages - (P1-1)
 UI - UI shows current State of panel - (P1-2)
 UI - Web server to serve up the UI - (P1-2)
-UI - UI has Virtual Inputs - (P1-2)
 
 Version 2
 UI - Websocket Updates (P2-1)
