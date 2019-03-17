@@ -6,10 +6,14 @@ let fs = require('fs');
 let logic_simulator = require("./logic_simulator.js");
 var spi = require('./SPI_Controller.js');
 var http = require('./http_server.js');
+var lcd = require('./LCD_SPI_Controller.js');
 //End Libraries
 
+spi.debugMode = false;
+lcd.debugMode = false;
+logic_simulator.debugMode = false;
 
-spi.debugMode = true;
+
 spi.setup({
     "chip_select_1": 8,
     "chip_select_2": 7,
@@ -21,9 +25,6 @@ spi.setup({
 
 http.start();
 
-var lcd = require('./LCD_SPI_Controller.js');
-
-lcd.debugMode = true;
 lcd.setup({
     "number_of_LCDs": 3,
     "lcd_clock": 25,
@@ -56,9 +57,9 @@ lcd.set({ "line": 2, "lcd": 3, "message": "4400 Units/Power" });
 lcd.commit();
 
 
+
 fs.readFile((__dirname + '/circuits/' + configFile + ".json"), { encoding: 'utf-8' }, function(err, circuit) {
     circuit = JSON.parse(circuit);
-    logic_simulator.debugMode = true;
 
     function process() {
         http.updateCiruit(circuit);
@@ -79,6 +80,7 @@ fs.readFile((__dirname + '/circuits/' + configFile + ".json"), { encoding: 'utf-
 //Start Listening for Control - C
 if (false) {
     process.on('let', function() {
+        conosle.log("Halting all");
         spi.halt();
         lcd.halt();
         unexportOnClose();

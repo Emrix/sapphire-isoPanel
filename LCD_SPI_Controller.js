@@ -26,15 +26,15 @@ function setup(opt) {
     if (!debugMode) {
         lcd_clock = new Gpio((opt.lcd_clock || 25), 'out');
         serial_out = new Gpio((opt.serial_out || 2), 'out');
-        dBusR = new Gpio((opt.dBusR || 4), 'in', 'both');
+        dBusR = new Gpio((opt.dBusR || 4), 'out');
         dBus0 = new Gpio((opt.dBus0 || 14), 'out');
         dBus1 = new Gpio((opt.dBus1 || 15), 'out');
         dBus2 = new Gpio((opt.dBus2 || 17), 'out');
         dBus3 = new Gpio((opt.dBus3 || 18), 'out');
-        dBus4 = new Gpio((opt.dBus4 || 27), 'in', 'both');
+        dBus4 = new Gpio((opt.dBus4 || 27), 'out');
         dBus5 = new Gpio((opt.dBus5 || 22), 'out');
         dBus6 = new Gpio((opt.dBus6 || 23), 'out');
-        dBus7 = new Gpio((opt.dBus7 || 24), 'in', 'both');
+        dBus7 = new Gpio((opt.dBus7 || 24), 'out');
     } else {
         lcd_clock = Gpio;
         serial_out = Gpio;
@@ -112,14 +112,14 @@ function halt() {
 function writeBus(data) {
     for (let x = 0; x < 9; x++) {
         dBusR.writeSync(data[0]);
-        dBus7.writeSync(data[1]);
-        dBus6.writeSync(data[2]);
-        dBus5.writeSync(data[3]);
-        dBus4.writeSync(data[4]);
-        dBus3.writeSync(data[5]);
-        dBus2.writeSync(data[6]);
-        dBus1.writeSync(data[7]);
-        dBus0.writeSync(data[8]);
+//        dBus7.writeSync(data[1]);
+//        dBus6.writeSync(data[2]);
+//        dBus5.writeSync(data[3]);
+//        dBus4.writeSync(data[4]);
+//        dBus3.writeSync(data[5]);
+//        dBus2.writeSync(data[6]);
+//        dBus1.writeSync(data[7]);
+//        dBus0.writeSync(data[8]);
     }
 }
 
